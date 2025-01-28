@@ -1,0 +1,31 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Verdana, sans-serif;
+}
+
+#menu{
+    height: 10vh;
+    background-color: #fff;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: solid #0a0a0a;
+}
+
+#menu_title{
+    display: flex;
+    height: inherit;
+    align-items: center;
+    justify-content: center;
+    background-color: #0a0a0a;
+    color: #fff;
+    text-align: center;
+    font-weight: 600;
+
+}
+
+#title{
+    padding: 2%;
+}
+

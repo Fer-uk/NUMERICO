@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart.js: y = x</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="menu">
+        <div id="menu_title">
+            <a id="title">Actividad 1</a>
+        </div>
+
+        <button id="e^x">e^x</button>
+        <button id="e^-x">e^-x</button>
+        <button id="sen(x)">sen(x)</button>
+        <button id="cos(x)">cos(x)</button>
+        <button id="senh(x)">senh(x)</button>
+        <button id="cosh(x)">cosh(x)</button>
+        <button id="ln(1+x)">ln(1+x)</button>
+
+        <label for="rangeSlider">Rango de x: </label>
+        <input id="rangeSlider" type="range" min="5" max="20" value="10" step="1">
+        <span id="rangeValue">10</span>
+
+        <label for="rangeSlider">Rango de x: </label>
+        <input id="rangeSlider" type="range" min="5" max="20" value="10" step="1">
+        <span id="rangeValue">10</span>
+    </div>
+    <div style="width: 80%; margin: auto;">
+        <canvas id="lineChart"></canvas>
+    </div>
+
+    <script src="main.js"></script> 
+</body>
+</html>
