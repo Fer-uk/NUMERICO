@@ -55,6 +55,8 @@ body{
 
 .but:hover{
     transform: scale(1.1);
+    background-color: #0a0a0a;
+    color: #fff;
 }
 
 .sld{

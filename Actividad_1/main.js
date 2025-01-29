@@ -24,7 +24,7 @@ function nex(a, b, pasos = 5){
     return data;
 }
 
-function nexT(a, b, pasos = 5){
+function nexT(a, b,g, pasos = 5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
         return { x: x, y: TAYnex(x, g) };  // Calcula e^x
@@ -34,8 +34,16 @@ function nexT(a, b, pasos = 5){
 
 function sen(a,b,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
-        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: Math.sin(x) };  // Calcula e^x
+        let x = a + (i * (b - a) / pasos); 
+        return { x: x, y: Math.sin(x) }; 
+    });
+    return data;
+}
+
+function senT(a,b,g,pasos=5){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); 
+        return { x: x, y:TAYsen(x,g) }; 
     });
     return data;
 }
@@ -48,10 +56,26 @@ function cos(a,b,pasos=5){
     return data;
 }
 
+function cosT(a,b,g,pasos=5){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: TAYcos(x, g) };  // Calcula e^x
+    });
+    return data;
+}
+
 function senh(a,b,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
         return { x: x, y: Math.sinh(x) };  // Calcula e^x
+    });
+    return data;
+}
+
+function senhT(a,b,g,pasos=5){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: TAYsenh(x, g) };  // Calcula e^x
     });
     return data;
 }
@@ -64,6 +88,14 @@ function cosh(a,b,pasos=5){
     return data;
 }
 
+function coshT(a,b,g,pasos=5){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: TAYcosh(x,g) };  // Calcula e^x
+    });
+    return data;
+}
+
 function ln(a,b,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
@@ -71,6 +103,16 @@ function ln(a,b,pasos=5){
     });
     return data;
 }
+
+function lnT(a,b,g,pasos=5){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: TAYln(x,g) };  // Calcula e^x
+    });
+    return data;
+}
+
+
 
 // Función que calcula el factorial de un número
 function factorial(n) {
@@ -82,6 +124,7 @@ for (let i = 2; i <= n; i++) {
 return result;
 }
 
+//Calculo de un opunto x de un plinomio de grado g
 function TAYex(x, g){
     let y=0;
     for (let i = 0; i <= g; i++){
@@ -98,11 +141,10 @@ function TAYnex(x, g){
     return y
 }
 
-//Aun sin terminar
 function TAYsen(x, g){
     let y=0;
     for (let i = 0; i <= g; i++){
-        y= y + Math.pow(x,i)/factorial(i)
+        y= y +( Math.pow(x,2*i +1)/factorial(2*i +1) * Math.pow(-1, i))
     }
     return y
 }
@@ -110,16 +152,31 @@ function TAYsen(x, g){
 function TAYcos(x, g){
     let y=0;
     for (let i = 0; i <= g; i++){
-        y= y + Math.pow(x,i)/factorial(i);
+        y= y +( Math.pow(x,2*i)/factorial(2*i) * Math.pow(-1, i))
     }
+    return y
+}
+
+function TAYsenh(x, g){
+    let y=0;
+    //Agregar funcion de senh
+    return y
+}
+
+function TAYcosh(x, g){
+    let y=0;
+    //Agregar funcion de cosh
+    return y
+}
+
+function TAYln(x, g){
+    let y=0;
+    //Agregar funcion de cosh
     return y
 }
 
 //Regresa la tabulacion respecto a una funcion
 function dataFun(fun, a, b, g, pasos){
-    console.log(g)
-    console.log(pasos)
-    
         switch (fun) {
             case 'exp':
             data = ex(a,b,pasos)
@@ -146,22 +203,22 @@ function dataFun(fun, a, b, g, pasos){
                 data = exT(a,b,g,pasos)
             break;
             case 'nexpT':
-                data = nexT(a,b,pasos)
+                data = nexT(a,b,g,pasos)
             break;
             case 'senT':
-                data = senT(a,b,pasos)
+                data = senT(a,b,g,pasos)
             break;
             case 'cosT':
-                data = cosT(a,b,pasos)
+                data = cosT(a,b,g,pasos)
             break;
             case 'senhT':
-                data = senhT(a,b,pasos)
+                data = senhT(a,b,g,pasos)
             break;
             case 'coshT':
-                data = coshT(a,b,pasos)
+                data = coshT(a,b,g,pasos)
             break;
             case 'lnT':
-                data = lnT(-a,b,pasos)
+                data = lnT(a,b,g,pasos)
             break;
             default:
             
@@ -191,6 +248,7 @@ const botones = document.getElementsByClassName('but');
 let func;
 let a=-2;
 let b=4;
+let grades;
 
 const config = {
     type: 'line',
@@ -236,12 +294,11 @@ function inputGrades() {
     let input = prompt("Ingresa los grados separados por espacios:");
     
     if (input != null && input != "") {
-      // Convertir la cadena de texto en un arreglo de enteros
-      let numeros = input.split(" ").map(Number); // 'map(Number)' convierte cada valor en un número entero
-      
+     
+      let numeros = input.split(" ").map(Number); 
       // Verificar que todos los elementos sean números enteros
       if (numeros.every(num => Number.isInteger(num))) {
-        console.log(numeros);  // Muestra el arreglo en la consola
+        
         return numeros;
       } else {
         alert("Por favor, ingresa solo números válidos.");
@@ -258,13 +315,13 @@ function inputGrades() {
 function updateSliderValueN() {
     const value = sliderN.value;
     sliderVN.textContent = value;
-    console.log(value);
-    /*C.data.datasets.splice(1, 1); 
-
-    
-    dataSet = newDataSet(data=data, lbl=func, tens=0, bc='rgba(160, 241, 149, 0.9)', bk='rgba(27, 116, 32, 0.73)');
-    C.data.datasets.push(dataSet);
-    C.update();*/
+    for (let j=1; j<=C.data.datasets.length; j++){
+        C.data.datasets.splice(j); 
+    }
+    for (let i=0; i<grades.length; i++){
+        C.data.datasets.push(newDataSet(data=dataFun(fun=func+'T' ,a=a, b=b, g=grades[i], pasos=parseFloat(value)), lbl='grado:'+grades[i], tens=0, bc='rgba(160, 241, 149, 0.9)', bk='rgba(160, 241, 149, 0.9)'))
+    }
+    C.update();
 }
 sliderN.addEventListener('input', updateSliderValueN);
 
@@ -285,12 +342,9 @@ Array.from(botones).forEach(boton => {
         C.data.datasets.push(dataSet);
 
         //graficar funcion con apoximaciones
-        console.log(grades) 
         for (i=0; i<grades.length; i++){
             //Codigo para los datos
-
-            C.data.datasets.push(newDataSet(data=dataFun(fun=func+'T' ,a=a, b=b, g=grades[i], pasos=parseFloat(sliderN.value)), lbl=func+'T grado:'+grades[i], tens=0, bc='rgba(160, 241, 149, 0.9)', bk='rgba(160, 241, 149, 0.9)'))
-            console.log('hola' + grades[i])
+            C.data.datasets.push(newDataSet(data=dataFun(fun=func+'T' ,a=a, b=b, g=grades[i], pasos=parseFloat(sliderN.value)), lbl= 'grado:'+grades[i], tens=0, bc='rgba(160, 241, 149, 0.9)', bk='rgba(160, 241, 149, 0.9)'))
         }
 
         
