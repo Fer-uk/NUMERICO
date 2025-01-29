@@ -101,10 +101,12 @@ function TAYcos(x, g){
 
 //Regresa la tabulacion respecto a una funcion
 function dataFun(fun, a, b, g, pasos){
-    if (g != NaN){
+    console.log(g)
+    console.log(pasos)
+    
         switch (fun) {
             case 'exp':
-            data = exT(a,b,pasos)
+            data = ex(a,b,pasos)
             break;
             case 'nexp':
                 data = nex(a,b,pasos)
@@ -125,14 +127,8 @@ function dataFun(fun, a, b, g, pasos){
             case 'ln':
                 data = ln(-a,b,pasos)
             break;
-            default:
-            
-        }
-    }else{
-        fun = fun + "T"
-        switch (fun) {
             case 'expT':
-            data = exT(a,b,g,pasos)
+                data = exT(a,b,g,pasos)
             break;
             case 'nexpT':
                 data = nex(a,b,pasos)
@@ -156,7 +152,7 @@ function dataFun(fun, a, b, g, pasos){
             default:
             
         }
-    }
+    
     return data;
 }
 
@@ -232,7 +228,7 @@ function inputGrades() {
       // Verificar que todos los elementos sean números enteros
       if (numeros.every(num => Number.isInteger(num))) {
         console.log(numeros);  // Muestra el arreglo en la consola
-        return numeros
+        return numeros;
       } else {
         alert("Por favor, ingresa solo números válidos.");
         return NaN;
@@ -249,37 +245,12 @@ function updateSliderValueN() {
     const value = sliderN.value;
     sliderVN.textContent = value;
     console.log(value);
-    C.data.datasets.splice(1, 1); 
+    /*C.data.datasets.splice(1, 1); 
 
-    switch (func) {
-        case 'exp':
-          data = ex(-2,4,parseInt(value));
-          break;
-        case 'nexp':
-            data = nex(-2,4, parseInt(value));
-          break;
-        case 'sen':
-            data = sen(-2,4,parseInt(value));
-          break;
-        case 'cos':
-            data = cos(-2,4,parseInt(value));
-          break;
-
-        case 'senh':
-            data = senh(-2,4,parseInt(value));
-          break;
-        case 'cosh':
-            data = cosh(-2,4,parseInt(value));
-          break;
-        case 'ln':
-            data = ln(-1,4,parseInt(value));
-          break;
-        default:
-          // Bloque de código si no coincide con ningún valor
-    }
+    
     dataSet = newDataSet(data=data, lbl=func, tens=0, bc='rgba(160, 241, 149, 0.9)', bk='rgba(27, 116, 32, 0.73)');
     C.data.datasets.push(dataSet);
-    C.update();
+    C.update();*/
 }
 sliderN.addEventListener('input', updateSliderValueN);
 
@@ -295,16 +266,20 @@ Array.from(botones).forEach(boton => {
         //graficar funcion original
         func = this.id
         C.data.datasets = [];
-        data = dataFun(func, a, b, NaN, 35);
-
-        //graficar funcion con apoximaciones 
-        for (i=0; i<=grades.length; i++){
-            //Codigo para los datos
-            console.log('hola')
-        }
-
+        data = dataFun(fun=func, a=a, b=b, g=NaN, pasos=35);
         dataSet = newDataSet(data, func, 0)
         C.data.datasets.push(dataSet);
+
+        //graficar funcion con apoximaciones
+        console.log(grades) 
+        for (i=0; i<grades.length; i++){
+            //Codigo para los datos
+
+            C.data.datasets.push(newDataSet(data=dataFun(fun=func+'T' ,a=a, b=b, g=grades[i], pasos=parseFloat(sliderN.value)), lbl=func+'T grado:'+grades[i], tens=0, bc='rgba(160, 241, 149, 0.9)', bk='rgba(160, 241, 149, 0.9)'))
+            console.log('hola' + grades[i])
+        }
+
+        
         C.update();
     });
 });
