@@ -24,6 +24,14 @@ function nex(a, b, pasos = 5){
     return data;
 }
 
+function nexT(a, b, pasos = 5){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: TAYnex(x, g) };  // Calcula e^x
+    });
+    return data;
+}
+
 function sen(a,b,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
@@ -82,6 +90,14 @@ function TAYex(x, g){
     return y
 }
 
+function TAYnex(x, g){
+    let y=0;
+    for (let i = 0; i <= g; i++){
+        y= y + (Math.pow(x,i)/factorial(i) * (Math.pow(-1, i)))
+    }
+    return y
+}
+
 //Aun sin terminar
 function TAYsen(x, g){
     let y=0;
@@ -117,7 +133,6 @@ function dataFun(fun, a, b, g, pasos){
             case 'cos':
                 data = cos(a,b,pasos)
             break;
-
             case 'senh':
                 data = senh(a,b,pasos)
             break;
@@ -131,23 +146,22 @@ function dataFun(fun, a, b, g, pasos){
                 data = exT(a,b,g,pasos)
             break;
             case 'nexpT':
-                data = nex(a,b,pasos)
+                data = nexT(a,b,pasos)
             break;
             case 'senT':
-                data = sen(a,b,pasos)
+                data = senT(a,b,pasos)
             break;
             case 'cosT':
-                data = cos(a,b,pasos)
+                data = cosT(a,b,pasos)
             break;
-
             case 'senhT':
-                data = senh(a,b,pasos)
+                data = senhT(a,b,pasos)
             break;
             case 'coshT':
-                data = cosh(a,b,pasos)
+                data = coshT(a,b,pasos)
             break;
             case 'lnT':
-                data = ln(-a,b,pasos)
+                data = lnT(-a,b,pasos)
             break;
             default:
             
