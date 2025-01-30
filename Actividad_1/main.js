@@ -175,9 +175,13 @@ function TAYcosh(x, g){
 
 function TAYln(x, g){
     let y=0;
-    for (let i = 1; i <= g; i++){
-        y= y +( (Math.pow(x,i)*Math.pow(-1, i+1)) /i)
+    
+    if(g!=0){
+        for (let i = 1; i <= g; i++){
+            y= y +( (Math.pow(-1, i+1)*Math.pow(x,i))/(i))
+        }
     }
+   
     
     return y
 }
@@ -251,8 +255,8 @@ const config = {
             {
                 label: 'Selecciona una funcion',
                 data: dataYEqualsX,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(235, 0, 0, 1)',
+                backgroundColor: 'rgba(235, 0, 0, 1)',
                 showLine: true, // Conectar los puntos
                 tension: 0
             },
@@ -283,7 +287,7 @@ const ctx = document.getElementById('lineChart').getContext('2d');
 let C = new Chart(ctx, config);
 
 //Pedir grados
-function inputGrades() {
+function inputGrades(id) {
     // Solicitar al usuario ingresar números separados por espacios
     let input = prompt("Ingresa los grados separados por espacios:");
     
@@ -371,7 +375,7 @@ Array.from(botones).forEach(boton => {
         console.log('ID del botón presionado: ${this.id}');
         a = parseFloat(prompt("Ingresa el límite inferior del intervalo:"));
         b = parseFloat(prompt("Ingresa el límite superior del intervalo:"));
-        grades = inputGrades();
+        grades = inputGrades(this.id);
 
         func = this.id;
         C.data.datasets = [];
