@@ -159,92 +159,86 @@ function TAYcos(x, g){
 
 function TAYsenh(x, g){
     let y=0;
-    //Agregar funcion de senh
+    for (let i = 0; i <= g; i++){
+        y= y +( Math.pow(x,2*i+1)/factorial(2*i+1))
+    }
     return y
 }
 
 function TAYcosh(x, g){
     let y=0;
-    //Agregar funcion de cosh
+    for (let i = 0; i <= g; i++){
+        y= y +( Math.pow(x,2*i)/factorial(2*i))
+    }
     return y
 }
 
 function TAYln(x, g){
     let y=0;
-    //Agregar funcion de cosh
+    for (let i = 1; i <= g; i++){
+        y= y +( (Math.pow(x,i)*Math.pow(-1, i+1)) /i)
+    }
+    
     return y
 }
 
 //Regresa la tabulacion respecto a una funcion
 function dataFun(fun, a, b, g, pasos){
-        switch (fun) {
-            case 'exp':
-            data = ex(a,b,pasos)
-            break;
-            case 'nexp':
-                data = nex(a,b,pasos)
-            break;
-            case 'sen':
-                data = sen(a,b,pasos)
-            break;
-            case 'cos':
-                data = cos(a,b,pasos)
-            break;
-            case 'senh':
-                data = senh(a,b,pasos)
-            break;
-            case 'cosh':
-                data = cosh(a,b,pasos)
-            break;
-            case 'ln':
-                data = ln(-a,b,pasos)
-            break;
-            case 'expT':
-                data = exT(a,b,g,pasos)
-            break;
-            case 'nexpT':
-                data = nexT(a,b,g,pasos)
-            break;
-            case 'senT':
-                data = senT(a,b,g,pasos)
-            break;
-            case 'cosT':
-                data = cosT(a,b,g,pasos)
-            break;
-            case 'senhT':
-                data = senhT(a,b,g,pasos)
-            break;
-            case 'coshT':
-                data = coshT(a,b,g,pasos)
-            break;
-            case 'lnT':
-                data = lnT(a,b,g,pasos)
-            break;
-            default:
-            
-        }
-    
+    switch (fun) {
+        case 'exp':
+        data = ex(a,b,pasos)
+        break;
+        case 'nexp':
+            data = nex(a,b,pasos)
+        break;
+        case 'sen':
+            data = sen(a,b,pasos)
+        break;
+        case 'cos':
+            data = cos(a,b,pasos)
+        break;
+        case 'senh':
+            data = senh(a,b,pasos)
+        break;
+        case 'cosh':
+            data = cosh(a,b,pasos)
+        break;
+        case 'ln':
+            data = ln(a,b,pasos)
+        break;
+        case 'expT':
+            data = exT(a,b,g,pasos)
+        break;
+        case 'nexpT':
+            data = nexT(a,b,g,pasos)
+        break;
+        case 'senT':
+            data = senT(a,b,g,pasos)
+        break;
+        case 'cosT':
+            data = cosT(a,b,g,pasos)
+        break;
+        case 'senhT':
+            data = senhT(a,b,g,pasos)
+        break;
+        case 'coshT':
+            data = coshT(a,b,g,pasos)
+        break;
+        case 'lnT':
+            data = lnT(a,b,g,pasos)
+        break;
+        default:   
+    }
     return data;
 }
 
-//Para crear otro dataset (formato para graficar)
-function newDataSet(data, lbl, tens, bc='rgba(54, 162, 235, 1)', bk='rgba(54, 162, 235, 0.2)'){
-    const newdata = {
-        label: lbl,
-        data: data,
-        borderColor: bc,
-        backgroundColor: bk,
-        showLine: true,
-        tension: tens
-    }
-    return newdata;
-}
 
 //Elementos necesarios para el funcionamiento de la pagina
 const dataYEqualsX = []
 const sliderN = document.getElementById('sliderN');
 const sliderVN = document.getElementById('sliderVN');
 const botones = document.getElementsByClassName('but');
+let randomKey;
 let func;
 let a=-2;
 let b=4;
@@ -298,7 +292,7 @@ function inputGrades() {
       let numeros = input.split(" ").map(Number); 
       // Verificar que todos los elementos sean números enteros
       if (numeros.every(num => Number.isInteger(num))) {
-        
+        numeros.sort((a, b) => a - b);
         return numeros;
       } else {
         alert("Por favor, ingresa solo números válidos.");
@@ -311,43 +305,97 @@ function inputGrades() {
     
 }
 
-//Actualizar los valores de n en el polinomio
+// Función para generar un color más oscuro basado en el índice de grado
+function generateColor(baseColor, factor) {
+    let [r, g, b] = baseColor; // Extraer componentes RGB
+    r = Math.max(0, r - factor * 20); 
+    g = Math.max(0, g - factor * 20); 
+    b = Math.max(0, b - factor * 20);
+    return 'rgba(' + r+ ','+g + ','+b + ', 1)';
+}
+
+// Diccionario de colores base para cada color elegido
+const colorMap = {
+    verde: [138, 255, 15],
+    morado: [150, 80, 190],
+    azul: [54, 162, 235],
+    amarillo: [255, 221, 51],
+    naranja: [255, 128, 0],
+    rosa: [255, 105, 180],
+    gris: [128, 128, 128],
+    marrón: [139, 69, 19],
+    turquesa: [64, 224, 208],
+    dorado: [255, 215, 0],
+    rojo: [235, 0, 0],
+};
+
+
+
+
+// Para crear otro dataset (formato para graficar)
+function newDataSet(data, lbl, tens, baseColor, factor) {
+    const darkenedColor = generateColor(colorMap[baseColor], factor);
+    console.log(darkenedColor)
+    return {
+        label: lbl,
+        data: data,
+        borderColor: darkenedColor,
+        backgroundColor: darkenedColor,
+        showLine: true,
+        tension: tens
+    };
+}
+
+// Modificar la actualización del gráfico para incluir la variación de color
 function updateSliderValueN() {
     const value = sliderN.value;
     sliderVN.textContent = value;
-    for (let j=1; j<=C.data.datasets.length; j++){
-        C.data.datasets.splice(j); 
-    }
-    for (let i=0; i<grades.length; i++){
-        C.data.datasets.push(newDataSet(data=dataFun(fun=func+'T' ,a=a, b=b, g=grades[i], pasos=parseFloat(value)), lbl='grado:'+grades[i], tens=0, bc='rgba(160, 241, 149, 0.9)', bk='rgba(160, 241, 149, 0.9)'))
+    C.data.datasets.splice(1); // Limpiar anteriores aproximaciones
+    
+    for (let i = 0; i < grades.length; i++) {
+        C.data.datasets.push(newDataSet(
+            dataFun(func + 'T', a, b, grades[i], parseFloat(value)), 
+            'grado: ' + grades[i], 
+            0, 
+            String(randomKey), 
+            i
+        ));
     }
     C.update();
 }
-sliderN.addEventListener('input', updateSliderValueN);
 
+sliderN.addEventListener('input', updateSliderValueN);
 
 Array.from(botones).forEach(boton => {
     boton.addEventListener('click', function() {
-        console.log(`ID del botón presionado: ${this.id}`);
-        //Pedir datos
-        a =  parseFloat(prompt("Ingresa el limite inferior del intervalo:"));
-        b =  parseFloat(prompt("Ingresa el limite superior del intervalo:"));
-        grades = inputGrades()
+        console.log('ID del botón presionado: ${this.id}');
+        a = parseFloat(prompt("Ingresa el límite inferior del intervalo:"));
+        b = parseFloat(prompt("Ingresa el límite superior del intervalo:"));
+        grades = inputGrades();
 
-        //graficar funcion original
-        func = this.id
+        func = this.id;
         C.data.datasets = [];
-        data = dataFun(fun=func, a=a, b=b, g=NaN, pasos=35);
-        dataSet = newDataSet(data, func, 0)
-        C.data.datasets.push(dataSet);
 
-        //graficar funcion con apoximaciones
-        for (i=0; i<grades.length; i++){
-            //Codigo para los datos
-            C.data.datasets.push(newDataSet(data=dataFun(fun=func+'T' ,a=a, b=b, g=grades[i], pasos=parseFloat(sliderN.value)), lbl= 'grado:'+grades[i], tens=0, bc='rgba(160, 241, 149, 0.9)', bk='rgba(160, 241, 149, 0.9)'))
+        const colorBase = 'rojo'; // Color base para la función original
+        data = dataFun(func, a, b, NaN, 35);
+        C.data.datasets.push(newDataSet(data, func, 0, colorBase, 0));
+
+        const keys = Object.keys(colorMap);
+        // Seleccionar una clave aleatoria
+        randomKey = keys[Math.floor(Math.random() *10)];
+       
+        console.log("aquiiii" + randomKey)
+        for (let i = 0; i < grades.length; i++) {
+           
+            C.data.datasets.push(newDataSet(
+                dataFun(func + 'T', a, b, grades[i], parseFloat(sliderN.value)), 
+                'grado: ' + grades[i], 
+                0, 
+                String(randomKey), 
+                i
+            ));
         }
-
-        
         C.update();
     });
 });
+
