@@ -4,14 +4,14 @@ function ex(a, b, pasos = 5){
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
         return { x: x, y: Math.exp(x) };  // Calcula e^x
     });
-    console.log(data)
+   
     return data;
 }
 
 function exT(a, b, g, pasos = 5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: TAYex(x, g) };  // Calcula e^x
+        return { x: x, y: TAYex(x, g) };  // Calcula e^x a traves del polinomio de Taylor
     });
     return data;
 }
@@ -19,7 +19,7 @@ function exT(a, b, g, pasos = 5){
 function nex(a, b, pasos = 5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: Math.exp(-1*x) };  // Calcula e^x
+        return { x: x, y: Math.exp(-1*x) };  // Calcula e^-x
     });
     return data;
 }
@@ -27,14 +27,14 @@ function nex(a, b, pasos = 5){
 function nexT(a, b,g, pasos = 5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: TAYnex(x, g) };  // Calcula e^x
+        return { x: x, y: TAYnex(x, g) };  // Calcula e^-x por taylor
     });
     return data;
 }
 
 function sen(a,b,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
-        let x = a + (i * (b - a) / pasos); 
+        let x = a + (i * (b - a) / pasos); //calcula sen
         return { x: x, y: Math.sin(x) }; 
     });
     return data;
@@ -42,7 +42,7 @@ function sen(a,b,pasos=5){
 
 function senT(a,b,g,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
-        let x = a + (i * (b - a) / pasos); 
+        let x = a + (i * (b - a) / pasos);  //calcula sen por taylor
         return { x: x, y:TAYsen(x,g) }; 
     });
     return data;
@@ -51,7 +51,7 @@ function senT(a,b,g,pasos=5){
 function cos(a,b,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: Math.cos(x) };  // Calcula e^x
+        return { x: x, y: Math.cos(x) };  // Calcula cos
     });
     return data;
 }
@@ -59,7 +59,7 @@ function cos(a,b,pasos=5){
 function cosT(a,b,g,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: TAYcos(x, g) };  // Calcula e^x
+        return { x: x, y: TAYcos(x, g) };  // Calcula cos por taylor
     });
     return data;
 }
@@ -67,7 +67,7 @@ function cosT(a,b,g,pasos=5){
 function senh(a,b,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: Math.sinh(x) };  // Calcula e^x
+        return { x: x, y: Math.sinh(x) };  // Calcula senh
     });
     return data;
 }
@@ -75,7 +75,7 @@ function senh(a,b,pasos=5){
 function senhT(a,b,g,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: TAYsenh(x, g) };  // Calcula e^x
+        return { x: x, y: TAYsenh(x, g) };  // Calcula senh por taylor
     });
     return data;
 }
@@ -83,7 +83,7 @@ function senhT(a,b,g,pasos=5){
 function cosh(a,b,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: Math.cosh(x) };  // Calcula e^x
+        return { x: x, y: Math.cosh(x) };  // Calcula cosh
     });
     return data;
 }
@@ -91,7 +91,7 @@ function cosh(a,b,pasos=5){
 function coshT(a,b,g,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: TAYcosh(x,g) };  // Calcula e^x
+        return { x: x, y: TAYcosh(x,g) };  // Calcula cosh por taylor
     });
     return data;
 }
@@ -99,7 +99,7 @@ function coshT(a,b,g,pasos=5){
 function ln(a,b,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: Math.log(1+x) };  // Calcula e^x
+        return { x: x, y: Math.log(1+x) };  // Calcula ln
     });
     return data;
 }
@@ -107,7 +107,7 @@ function ln(a,b,pasos=5){
 function lnT(a,b,g,pasos=5){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: TAYln(x,g) };  // Calcula e^x
+        return { x: x, y: TAYln(x,g) };  // Calcula ln por taylor
     });
     return data;
 }
@@ -231,7 +231,8 @@ function dataFun(fun, a, b, g, pasos){
         case 'lnT':
             data = lnT(a,b,g,pasos)
         break;
-        default:   
+        default:  
+        break; 
     }
     return data;
 }
@@ -287,7 +288,7 @@ const ctx = document.getElementById('lineChart').getContext('2d');
 let C = new Chart(ctx, config);
 
 //Pedir grados
-function inputGrades(id) {
+function inputGrades() {
     // Solicitar al usuario ingresar números separados por espacios
     let input = prompt("Ingresa los grados separados por espacios:");
     
@@ -339,7 +340,7 @@ const colorMap = {
 // Para crear otro dataset (formato para graficar)
 function newDataSet(data, lbl, tens, baseColor, factor) {
     const darkenedColor = generateColor(colorMap[baseColor], factor);
-    console.log(darkenedColor)
+   
     return {
         label: lbl,
         data: data,
@@ -372,10 +373,10 @@ sliderN.addEventListener('input', updateSliderValueN);
 
 Array.from(botones).forEach(boton => {
     boton.addEventListener('click', function() {
-        console.log('ID del botón presionado: ${this.id}');
+        console.log('ID del botón presionado: '+ this.id);
         a = parseFloat(prompt("Ingresa el límite inferior del intervalo:"));
         b = parseFloat(prompt("Ingresa el límite superior del intervalo:"));
-        grades = inputGrades(this.id);
+        grades = inputGrades();
 
         func = this.id;
         C.data.datasets = [];
@@ -388,7 +389,7 @@ Array.from(botones).forEach(boton => {
         // Seleccionar una clave aleatoria
         randomKey = keys[Math.floor(Math.random() *10)];
        
-        console.log("aquiiii" + randomKey)
+       
         for (let i = 0; i < grades.length; i++) {
            
             C.data.datasets.push(newDataSet(
