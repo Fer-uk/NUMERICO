@@ -4,8 +4,15 @@ function ex(a, b, pasos = 5){
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
         return { x: x, y: Math.exp(x) };  // Calcula e^x
     });
-   
-    return data;
+    
+    // Extract only y values
+    const yValues = data.map(point => point.y);
+
+    // Find the min and max y values
+    const minY = Math.min(...yValues);
+    const maxY = Math.max(...yValues);
+    console.log(minY, maxY)
+    return { data, minY, maxY };
 }
 
 function exT(a, b, g, pasos = 5){
@@ -21,7 +28,14 @@ function nex(a, b, pasos = 5){
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
         return { x: x, y: Math.exp(-1*x) };  // Calcula e^-x
     });
-    return data;
+    // Extract only y values
+    const yValues = data.map(point => point.y);
+
+    // Find the min and max y values
+    const minY = Math.min(...yValues);
+    const maxY = Math.max(...yValues);
+    console.log(minY, maxY)
+    return { data, minY, maxY };
 }
 
 function nexT(a, b,g, pasos = 5){
@@ -37,7 +51,14 @@ function sen(a,b,pasos=5){
         let x = a + (i * (b - a) / pasos); //calcula sen
         return { x: x, y: Math.sin(x) }; 
     });
-    return data;
+    // Extract only y values
+    const yValues = data.map(point => point.y);
+
+    // Find the min and max y values
+    const minY = Math.min(...yValues);
+    const maxY = Math.max(...yValues);
+    console.log(minY, maxY)
+    return { data, minY, maxY };
 }
 
 function senT(a,b,g,pasos=5){
@@ -53,7 +74,14 @@ function cos(a,b,pasos=5){
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
         return { x: x, y: Math.cos(x) };  // Calcula cos
     });
-    return data;
+    // Extract only y values
+    const yValues = data.map(point => point.y);
+
+    // Find the min and max y values
+    const minY = Math.min(...yValues);
+    const maxY = Math.max(...yValues);
+    console.log(minY, maxY)
+    return { data, minY, maxY };
 }
 
 function cosT(a,b,g,pasos=5){
@@ -69,7 +97,14 @@ function senh(a,b,pasos=5){
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
         return { x: x, y: Math.sinh(x) };  // Calcula senh
     });
-    return data;
+    // Extract only y values
+    const yValues = data.map(point => point.y);
+
+    // Find the min and max y values
+    const minY = Math.min(...yValues);
+    const maxY = Math.max(...yValues);
+    console.log(minY, maxY)
+    return { data, minY, maxY };
 }
 
 function senhT(a,b,g,pasos=5){
@@ -85,7 +120,14 @@ function cosh(a,b,pasos=5){
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
         return { x: x, y: Math.cosh(x) };  // Calcula cosh
     });
-    return data;
+    // Extract only y values
+    const yValues = data.map(point => point.y);
+
+    // Find the min and max y values
+    const minY = Math.min(...yValues);
+    const maxY = Math.max(...yValues);
+    console.log(minY, maxY)
+    return { data, minY, maxY };
 }
 
 function coshT(a,b,g,pasos=5){
@@ -97,11 +139,21 @@ function coshT(a,b,g,pasos=5){
 }
 
 function ln(a,b,pasos=5){
+    if (a == -1){
+        a=-0.9999999
+    }
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
         return { x: x, y: Math.log(1+x) };  // Calcula ln
     });
-    return data;
+    // Extract only y values
+    const yValues = data.map(point => point.y);
+
+    // Find the min and max y values
+    const minY = Math.min(...yValues);
+    const maxY = Math.max(...yValues);
+    console.log(minY, maxY)
+    return { data, minY, maxY };
 }
 
 function lnT(a,b,g,pasos=5){
@@ -261,24 +313,30 @@ const config = {
                 showLine: true, // Conectar los puntos
                 tension: 0
             },
+           
         ]
     },
     options: {
         responsive: true,
         scales: {
             x: {
+                min: -1,  
+                max: 1,   
                 type: 'linear',
                 position: 'bottom',
                 title: {
                     display: true,
                     text: 'x'
-                }
+                },
+                
             },
             y: {
+                min: -1,  
+                max: 1,   
                 title: {
                     display: true,
                     text: 'y'
-                }
+                },
             }
         }
     }
@@ -324,8 +382,6 @@ const colorMap = {
     verde: [138, 255, 15],
     morado: [150, 80, 190],
     azul: [54, 162, 235],
-    amarillo: [255, 221, 51],
-    naranja: [255, 128, 0],
     rosa: [255, 105, 180],
     gris: [128, 128, 128],
     marrón: [139, 69, 19],
@@ -355,8 +411,12 @@ function newDataSet(data, lbl, tens, baseColor, factor) {
 function updateSliderValueN() {
     const value = sliderN.value;
     sliderVN.textContent = value;
-    C.data.datasets.splice(1); // Limpiar anteriores aproximaciones
-    
+    C.data.datasets = []; // Limpiar anteriores aproximaciones
+    const colorBase = 'rojo'; // Color base para la función original
+    const { data, minY, maxY }  = dataFun(func, a, b, NaN, parseFloat(value));
+    C.options.scales.y.min = minY - Math.abs((minY-maxY)/2*0.1);
+    C.options.scales.y.max = maxY + Math.abs((minY-maxY)/2*0.1);
+    C.data.datasets.push(newDataSet(data, func, 0, colorBase, 0));
     for (let i = 0; i < grades.length; i++) {
         C.data.datasets.push(newDataSet(
             dataFun(func + 'T', a, b, grades[i], parseFloat(value)), 
@@ -382,7 +442,12 @@ Array.from(botones).forEach(boton => {
         C.data.datasets = [];
 
         const colorBase = 'rojo'; // Color base para la función original
-        data = dataFun(func, a, b, NaN, 35);
+        const { data, minY, maxY }  = dataFun(func, a, b, NaN, parseFloat(sliderN.value));
+        C.options.scales.y.min = minY - Math.abs((minY-maxY)/2*0.3);
+        C.options.scales.y.max = maxY + Math.abs((minY-maxY)/2*0.3);
+        C.options.scales.x.min = a;
+        C.options.scales.x.max = b;
+
         C.data.datasets.push(newDataSet(data, func, 0, colorBase, 0));
 
         const keys = Object.keys(colorMap);
