@@ -452,7 +452,7 @@ Array.from(botones).forEach(boton => {
 
         const keys = Object.keys(colorMap);
         // Seleccionar una clave aleatoria
-        randomKey = keys[Math.floor(Math.random() *10)];
+        randomKey = keys[Math.floor(Math.random() * 8)];
        
        
         for (let i = 0; i < grades.length; i++) {
