@@ -414,8 +414,10 @@ function updateSliderValueN() {
     C.data.datasets = []; // Limpiar anteriores aproximaciones
     const colorBase = 'rojo'; // Color base para la función original
     const { data, minY, maxY }  = dataFun(func, a, b, NaN, parseFloat(value));
-    C.options.scales.y.min = minY - Math.abs((minY-maxY)/2*0.1);
-    C.options.scales.y.max = maxY + Math.abs((minY-maxY)/2*0.1);
+    C.options.scales.y.min = minY - Math.abs((minY-maxY)/2*0.3);
+    C.options.scales.y.max = maxY + Math.abs((minY-maxY)/2*0.3);
+    C.options.scales.x.min = a - Math.abs((a-b)/2*0.2);
+    C.options.scales.x.max = b + Math.abs((a-b)/2*0.2);
     C.data.datasets.push(newDataSet(data, func, 0, colorBase, 0));
     for (let i = 0; i < grades.length; i++) {
         C.data.datasets.push(newDataSet(
@@ -430,7 +432,21 @@ function updateSliderValueN() {
 }
 
 sliderN.addEventListener('input', updateSliderValueN);
-
+Array.from(botones).forEach(boton => {
+    boton.addEventListener('click', function() {
+        console.log('ID del botón presionado: '+ this.id);
+        if (func){
+            const butant = document.getElementById(func);
+            butant.style.backgroundColor = "#fff";
+            butant.style.color = "#0a0a0a";
+        }
+        func= this.id
+        this.style.backgroundColor = "#0a0a0a";
+        this.style.color = "#fff";
+    });
+});
+/*
+Funcion anterior para graficar al presionar un boton de aqui puedes sacar el codigo para graficar
 Array.from(botones).forEach(boton => {
     boton.addEventListener('click', function() {
         console.log('ID del botón presionado: '+ this.id);
@@ -445,8 +461,8 @@ Array.from(botones).forEach(boton => {
         const { data, minY, maxY }  = dataFun(func, a, b, NaN, parseFloat(sliderN.value));
         C.options.scales.y.min = minY - Math.abs((minY-maxY)/2*0.3);
         C.options.scales.y.max = maxY + Math.abs((minY-maxY)/2*0.3);
-        C.options.scales.x.min = a;
-        C.options.scales.x.max = b;
+        C.options.scales.x.min = a - Math.abs((a-b)/2*0.2);
+        C.options.scales.x.max = b + Math.abs((a-b)/2*0.2);
 
         C.data.datasets.push(newDataSet(data, func, 0, colorBase, 0));
 
@@ -468,4 +484,4 @@ Array.from(botones).forEach(boton => {
         C.update();
     });
 });
-
+*/

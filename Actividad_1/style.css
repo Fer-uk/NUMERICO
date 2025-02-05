@@ -5,17 +5,42 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    height: 100%;
+    width: 100%;
+   
+}
+
+#topT{
+    
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    
+    border-bottom: 2px solid #0a0a0a;
+}
+
+#app{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 90vh;
+    
 }
 
 #menu{
-    height: 10vh;
+    margin-left: 20px;
+    height: 90%;
+    width: 25%;
     background-color: #fff;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
-
-    border-bottom: solid #0a0a0a;
-    margin-bottom: 1vh;
+    border-radius: 20px;
+    border: solid #0a0a0a;
+    margin-right: 1vh;
+    box-shadow: #0a0a0a;
     
 }
 
@@ -23,6 +48,7 @@ body{
 
     display: flex;
     height: inherit;
+    width: 15%;
     align-items: center;
     justify-content: center;
     background-color: #0a0a0a;
@@ -32,25 +58,15 @@ body{
 
 }
 
-#menu_op{
-    width: 100%;
-    height: inherit;
-    background-color: #fff;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
 
-    
-}
 
 #title{
     padding: 2%;
 }
 
 .but{
-    height: 45%;
-    width: 10vh;
+    height: 7vh;
+    width: 14vh;
     border-radius: 5px;
     border: 2px solid #0a0a0a ;
     background-color: #fff;
@@ -68,4 +84,72 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+
+#cont-but{
+    height: 40%;
+    width: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+  
+}
+
+.row-but{
+   
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+#cont-inter{
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    height: 10%;
+    
+
+}
+
+
+.inter{
+    width: 30%;
+    border: 1px solid #0a0a0a50;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+#gradosinp{
+    width: 70%;
+    border: 1px solid #0a0a0a50;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+#sliderN{
+    width: 70%;
+    border: 1px solid #0a0a0a50;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+#grfbtn{
+    height: 7vh;
+    width: 14vh;
+    border-radius: 5px;
+    border: 2px solid #0a0a0a ;
+    background-color: #fff;
+    color: #0a0a0a;
+    transition: all 0.2s ease;
+}
+
+#grfbtn:hover{
+    transform: scale(1.1);
+    background-color: #0a0a0a;
+    color: #fff;
 }
