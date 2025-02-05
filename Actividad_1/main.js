@@ -293,7 +293,6 @@ function dataFun(fun, a, b, g, pasos){
 //Elementos necesarios para el funcionamiento de la pagina
 const dataYEqualsX = []
 const sliderN = document.getElementById('sliderN');
-const sliderVN = document.getElementById('sliderVN');
 const botones = document.getElementsByClassName('but');
 let randomKey;
 let func;
@@ -345,29 +344,6 @@ const config = {
 const ctx = document.getElementById('lineChart').getContext('2d');
 let C = new Chart(ctx, config);
 
-//Pedir grados
-function inputGrades() {
-    // Solicitar al usuario ingresar números separados por espacios
-    let input = prompt("Ingresa los grados separados por espacios:");
-    
-    if (input != null && input != "") {
-     
-      let numeros = input.split(" ").map(Number); 
-      // Verificar que todos los elementos sean números enteros
-      if (numeros.every(num => Number.isInteger(num))) {
-        numeros.sort((a, b) => a - b);
-        return numeros;
-      } else {
-        alert("Por favor, ingresa solo números válidos.");
-        return NaN;
-      }
-    } else {
-      alert("No se proporcionaron números.");
-      return NaN;
-    }
-    
-}
-
 // Función para generar un color más oscuro basado en el índice de grado
 function generateColor(baseColor, factor) {
     let [r, g, b] = baseColor; // Extraer componentes RGB
@@ -410,7 +386,6 @@ function newDataSet(data, lbl, tens, baseColor, factor) {
 // Modificar la actualización del gráfico para incluir la variación de color
 function updateSliderValueN() {
     const value = sliderN.value;
-    sliderVN.textContent = value;
     C.data.datasets = []; // Limpiar anteriores aproximaciones
     const colorBase = 'rojo'; // Color base para la función original
     const { data, minY, maxY }  = dataFun(func, a, b, NaN, parseFloat(value));
@@ -431,7 +406,11 @@ function updateSliderValueN() {
     C.update();
 }
 
-sliderN.addEventListener('input', updateSliderValueN);
+const graficarBtn = document.getElementById('grfbtn');
+const aInput = document.getElementById('ainput');
+const bInput = document.getElementById('binput');
+const gradosInput = document.getElementById('gradosinp');
+
 Array.from(botones).forEach(boton => {
     boton.addEventListener('click', function() {
         console.log('ID del botón presionado: '+ this.id);
@@ -446,15 +425,29 @@ Array.from(botones).forEach(boton => {
     });
 });
 /*
-Funcion anterior para graficar al presionar un boton de aqui puedes sacar el codigo para graficar
-Array.from(botones).forEach(boton => {
-    boton.addEventListener('click', function() {
-        console.log('ID del botón presionado: '+ this.id);
-        a = parseFloat(prompt("Ingresa el límite inferior del intervalo:"));
-        b = parseFloat(prompt("Ingresa el límite superior del intervalo:"));
-        grades = inputGrades();
+Funcion anterior para graficar al presionar un boton de aqui puedes sacar el codigo para graficar*/
 
-        func = this.id;
+graficarBtn.addEventListener('click', function() {
+        a = parseFloat(aInput.value);
+        b = parseFloat(bInput.value);
+
+        if (isNaN(a) || isNaN(b)) {
+            alert("Por favor, ingresa valores válidos para a y b.");
+            return;
+        }
+        let numeros = gradosInput.value.split(" ").map(Number);
+        if (gradosInput.value != null && gradosInput.value != "") {
+            if (numeros.every(num => Number.isInteger(num))) {
+              numeros.sort((a, b) => a - b);
+            } else {
+              alert("Por favor, ingresa solo números válidos.");
+            }
+          } else {
+            alert("No se proporcionaron números.");
+          }
+        grades = numeros;
+
+        
         C.data.datasets = [];
 
         const colorBase = 'rojo'; // Color base para la función original
@@ -483,5 +476,4 @@ Array.from(botones).forEach(boton => {
         }
         C.update();
     });
-});
-*/
+
