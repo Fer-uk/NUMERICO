@@ -5,10 +5,10 @@ function ex(a, b, pasos = 5){
         return { x: x, y: Math.exp(x) };  // Calcula e^x
     });
     
-    // Extract only y values
+    // Extrae los valores de y
     const yValues = data.map(point => point.y);
 
-    // Find the min and max y values
+    // Encontrar el mayor y menor valor de y
     const minY = Math.min(...yValues);
     const maxY = Math.max(...yValues);
     console.log(minY, maxY)
@@ -290,6 +290,8 @@ function dataFun(fun, a, b, g, pasos){
 }
 
 
+
+
 //Elementos necesarios para el funcionamiento de la pagina
 const dataYEqualsX = []
 const sliderN = document.getElementById('sliderN');
@@ -309,13 +311,47 @@ const config = {
                 data: dataYEqualsX,
                 borderColor: 'rgba(235, 0, 0, 1)',
                 backgroundColor: 'rgba(235, 0, 0, 1)',
+                pointRadius: 0.1, 
                 showLine: true, // Conectar los puntos
                 tension: 0
             },
            
+           
         ]
     },
     options: {
+        plugins: {
+            annotation: {
+              annotations: {
+                line1: {
+                  type: 'line',
+                  xMin: 0, // Posición de la línea vertical
+                  xMax: 0,
+                  borderColor: 'black', // Color de la línea
+                  borderWidth: 1, // Grosor de la línea
+                 // borderDash: [5, 5], // Línea punteada (opcional)
+                  label: {
+                    content: 'x = 2',
+                    enabled: true,
+                    position: 'top'
+                  }
+                },
+                line2: {
+                    type: 'line',
+                    yMin: 0, // Posición de la línea vertical
+                    yMax: 0,
+                    borderColor: 'black', // Color de la línea
+                    borderWidth: 1, // Grosor de la línea
+                   // borderDash: [5, 5], // Línea punteada (opcional)
+                    label: {
+                      content: 'x = 2',
+                      enabled: true,
+                      position: 'top'
+                    }
+                  }
+              }
+            }
+          },
         responsive: true,
         scales: {
             x: {
@@ -354,57 +390,32 @@ function generateColor(baseColor, factor) {
 }
 
 // Diccionario de colores base para cada color elegido
-const colorMap = {
-    verde: [138, 255, 15],
-    morado: [150, 80, 190],
-    azul: [54, 162, 235],
-    rosa: [255, 105, 180],
-    gris: [128, 128, 128],
-    marrón: [139, 69, 19],
-    turquesa: [64, 224, 208],
-    dorado: [255, 215, 0],
-    rojo: [235, 0, 0],
-};
+const colorMap = [
+    'rgb(88, 161, 10)',
+    'rgba(255, 255, 0,1)',
+    'rgba(54, 162, 235,1)',
+    'rgb(235, 54, 154)',
+    'rgb(138, 16, 122)',
+    'rgba(235, 0, 0,1)',
+];
 
 
 
 
 // Para crear otro dataset (formato para graficar)
 function newDataSet(data, lbl, tens, baseColor, factor) {
-    const darkenedColor = generateColor(colorMap[baseColor], factor);
    
     return {
         label: lbl,
         data: data,
-        borderColor: darkenedColor,
-        backgroundColor: darkenedColor,
+        borderColor:baseColor,
+        backgroundColor: baseColor,
         showLine: true,
+        pointRadius: 0, 
         tension: tens
     };
 }
 
-// Modificar la actualización del gráfico para incluir la variación de color
-function updateSliderValueN() {
-    const value = sliderN.value;
-    C.data.datasets = []; // Limpiar anteriores aproximaciones
-    const colorBase = 'rojo'; // Color base para la función original
-    const { data, minY, maxY }  = dataFun(func, a, b, NaN, parseFloat(value));
-    C.options.scales.y.min = minY - Math.abs((minY-maxY)/2*0.3);
-    C.options.scales.y.max = maxY + Math.abs((minY-maxY)/2*0.3);
-    C.options.scales.x.min = a - Math.abs((a-b)/2*0.2);
-    C.options.scales.x.max = b + Math.abs((a-b)/2*0.2);
-    C.data.datasets.push(newDataSet(data, func, 0, colorBase, 0));
-    for (let i = 0; i < grades.length; i++) {
-        C.data.datasets.push(newDataSet(
-            dataFun(func + 'T', a, b, grades[i], parseFloat(value)), 
-            'grado: ' + grades[i], 
-            0, 
-            String(randomKey), 
-            i
-        ));
-    }
-    C.update();
-}
 
 const graficarBtn = document.getElementById('grfbtn');
 const aInput = document.getElementById('ainput');
@@ -447,30 +458,29 @@ graficarBtn.addEventListener('click', function() {
           }
         grades = numeros;
 
-        
         C.data.datasets = [];
-
-        const colorBase = 'rojo'; // Color base para la función original
         const { data, minY, maxY }  = dataFun(func, a, b, NaN, parseFloat(sliderN.value));
         C.options.scales.y.min = minY - Math.abs((minY-maxY)/2*0.3);
         C.options.scales.y.max = maxY + Math.abs((minY-maxY)/2*0.3);
         C.options.scales.x.min = a - Math.abs((a-b)/2*0.2);
         C.options.scales.x.max = b + Math.abs((a-b)/2*0.2);
+        console.log("aqui" + colorMap[-1])
+        C.data.datasets.push(newDataSet(data, func, 0, colorMap[colorMap.length-1], 0));
 
-        C.data.datasets.push(newDataSet(data, func, 0, colorBase, 0));
-
-        const keys = Object.keys(colorMap);
-        // Seleccionar una clave aleatoria
-        randomKey = keys[Math.floor(Math.random() * 8)];
-       
-       
+      
+        let j;
         for (let i = 0; i < grades.length; i++) {
+            if(i>colorMap.length-1){
+                j = Math.floor(Math.random() * (colorMap.length-1));
+            }else{
+                j=i
+            }
            
             C.data.datasets.push(newDataSet(
                 dataFun(func + 'T', a, b, grades[i], parseFloat(sliderN.value)), 
                 'grado: ' + grades[i], 
                 0, 
-                String(randomKey), 
+                colorMap[j], 
                 i
             ));
         }
