@@ -5,87 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slow Animated y = x² Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
 </head>
 <body>
+    <div>
+        <button id="anim">animate</button>
+    </div>
+    <div style="width: 70%; margin: auto; ">
+        <canvas id="myChart"></canvas>
+        <script  type="module" src="main.js"></script>
+    </div>
 
-<canvas id="myChart"></canvas>
-
-<script>
-    
-function exT(a, b, g, pasos = 5){
-    const data = Array.from({ length: pasos + 1 }, (_, i) => {
-        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: TAYex(x, g) };  // Calcula e^x a traves del polinomio de Taylor
-    });
-    return data;
-}
-
-// Función que calcula el factorial de un número
-function factorial(n) {
-if (n === 0 || n === 1) return 1;
-let result = 1;
-for (let i = 2; i <= n; i++) {
-    result *= i;
-}
-return result;
-}
-
-//Calculo de un opunto x de un plinomio de grado g
-function TAYex(x, g){
-    let y=0;
-    for (let i = 0; i <= g; i++){
-        y= y + Math.pow(x,i)/factorial(i)
-    }
-    return y
-}
-    const ctx = document.getElementById('myChart').getContext('2d');
-
-    const chartData = {
-        labels: [], // X values
-        datasets: [{
-            label: 'y = x²',
-            data: [], // Y values
-            borderColor: 'blue',
-            borderWidth: 2,
-            fill: false,
-            pointRadius: 2
-        }]
-    };
-
-    const config = {
-        type: 'line',
-        data: chartData,
-        options: {
-            animation: false,
-            scales: {
-                x: { type: 'linear', position: 'bottom' },
-                y: { beginAtZero: true }
-            }
-        }
-    };
-
-    const myChart = new Chart(ctx, config);
-
-    // Animation function
-    let x = 0;
-    const step = 1;  // Keep the same number of points
-    const delay = 1000; // Slower animation (increase for slower effect)
-
-    function animateChart() {
-        if (x > 10) return; // Stop animation
-
-        chartData.datasets[0].label = 'grado: '+ x;
-        chartData.datasets[0].data = exT(0,10,x, 20);
-
-        myChart.update();
-
-        x += step; 
-
-        setTimeout(animateChart, delay); // Add delay
-    }
-
-    animateChart(); // Start animation
-</script>
 
 </body>
 </html>
