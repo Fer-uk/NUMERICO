@@ -98,27 +98,27 @@ Array.from(btnfn).forEach(boton => {
         this.style.backgroundColor = "#0a0a0a";
         this.style.color = "#fff";
         switch (this.id){
-            case "btnA":
+            case "a":
                 inpa.value = 1;
                 inpb.value = 3;
                 inptol.value = 0.00001;
             break;
-            case "btnB":
+            case "b":
                 inpa.value = 2.5;
                 inpb.value = 3;
                 inptol.value = 0.0001;
             break;
-            case "btnC":
+            case "c":
                 inpa.value = -1;
                 inpb.value = 0;
                 inptol.value = 0.0001;
             break;
-            case "btnD":
+            case "d":
                 inpa.value =  0.7854;
                 inpb.value = 1.5;
                 inptol.value = 0.0001;
             break;
-            case "btnE":
+            case "e":
                 inpa.value = 1.5;
                 inpb.value = 2;
                 inptol.value = 0.00001;
@@ -169,7 +169,7 @@ function graficar(gr){
     let maxy;
     let lab;
     switch (gr) {
-        case 'btnA':
+        case 'a':
            const { data, minY, maxY }  = FN.a(parseFloat(inpa.value), parseFloat(inpb.value), 100);
            console.log(data)
             miny = minY;
@@ -249,7 +249,7 @@ anim.addEventListener('click', function() {
         //Graficar la funcion despejada x=g(x)
 
         myChart.update()
-        const {raiz, tabla } = MT.fixed_point('a', 1.5, 0.0005, 20)
+        const {raiz, tabla } = MT.fixed_point(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
         generarTabla(tabla)
 
 

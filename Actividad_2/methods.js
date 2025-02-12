@@ -34,12 +34,12 @@ export function fixed_point(opcion, p, tol, i) {
     let tabla = []; // Almacena las quintuplas de cada iteración
 
     while (iteraciones < i) {
-        p1 = func(p);
+        p1 = gx(p);
 
-        // Guardar la quintupla (iteración, p, p1, p1, error)
-        tabla.push([iteraciones + 1, p, p1, p1, Math.abs((p1 - p0))/2]);
+        // Guardar la quintupla (iteración, p, p1, f(p), error)
+        tabla.push([iteraciones + 1, p, p1, func(p), Math.abs((p1 - p))/2]);
 
-        if (p1 === 0 || Math.abs((p1 - p0)) / 2 < tol) break; // Convergencia
+        if (p1 === 0 || Math.abs((p1 - p)) / 2 < tol) break; // Convergencia
 
        p = p1
 
