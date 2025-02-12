@@ -1,8 +1,8 @@
 //x3 + 4x2 -10
-export function a(a=1, b=3, pasos=30){
+export function a(a=1, b=3, pasos=50){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: Math.pow(x,3)+ (4*Math.pow(x,2)) -10 }; 
+        return { x: x, y: aeva(x) }; 
     });
     // Extrae los valores de y
     const yValues = data.map(point => point.y);
@@ -12,6 +12,11 @@ export function a(a=1, b=3, pasos=30){
     const maxY = Math.max(...yValues);
     console.log(minY, maxY)
     return { data, minY, maxY };
+}
+
+function aeva(x){
+    console.log(x, Math.pow(x,3) , (4*Math.pow(x,2)))
+    return Math.pow(x,3) + (4*Math.pow(x,2)) -10
 }
 
 //x3 - 2x2 - 5 
@@ -76,5 +81,18 @@ export function e(a=1, b=2.5, pasos=30){
     const maxY = Math.max(...yValues);
     console.log(minY, maxY)
     return { data, minY, maxY };
+}
+
+export function apf(a=1, b=2.5, pasos=30){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: Math.pow(x,3)+ (4*Math.pow(x,2)) -10 }; 
+    });
+    return data;
+}
+
+export function ades(x){
+    const y = Math.pow((Math.pow(x,3)-10)/4, 0.5);
+    return y
 }
 
