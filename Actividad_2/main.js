@@ -273,6 +273,11 @@ anim.addEventListener('click', function() {
 
         animateChart(); // Start animation*/
     }
+
+    if (method === 'btnNR'){
+        const {raiz, tabla } = MT.newton_r(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
+        generarTabla(tabla)
+    }
     
     
 });
