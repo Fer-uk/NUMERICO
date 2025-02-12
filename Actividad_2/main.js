@@ -5,6 +5,15 @@ import * as MT from './methods.js';
 const ctx = document.getElementById('myChart').getContext('2d');
 
 
+const funciones = {
+    a: (a, b, pas) => FN.a(a, b, pas),  // x³ - 2x² - 5
+    b: (a, b, pas) => FN.b(a, b, pas),  // x³ + 3x² - 1
+    c: (a, b, pas) => FN.c(a, b, pas),  // x - cos(x)
+    d: (a, b, pas) => FN.d(a, b, pas),
+    e: (a, b, pas) => FN.e(a, b, pas)  // e^x + 2^(-x) + 2cos(x) - 6
+};
+
+
 const config = {
     type: 'line',
     data: {},
@@ -164,26 +173,12 @@ Array.from(btnmtd).forEach(boton => {
 });
 
 function graficar(gr){
-    let dat;
-    let miny;
-    let maxy;
-    let lab;
-    switch (gr) {
-        case 'a':
-           const { data, minY, maxY }  = FN.a(parseFloat(inpa.value), parseFloat(inpb.value), 100);
-           console.log(data)
-            miny = minY;
-            maxy = maxY
-           dat = data
-            lab= 'x3 + 4x2 -10'
-        break;
-    
-        default:
-            break;
-    }
+    const funcion = funciones[gr]
+    const { data, minY, maxY }  = funcion(parseFloat(inpa.value), parseFloat(inpb.value), 100);
+    console.log("hola", data)
     myChart.data.datasets.push({
-        label: lab,
-        data: dat, // Y values
+        label: document.getElementById(gr).textContent,
+        data: data, // Y values
         borderColor: 'blue',
         borderWidth: 2,
         fill: false,
@@ -193,7 +188,7 @@ function graficar(gr){
     myChart.options.scales.y.max =3 //maxy;
     myChart.options.scales.x.min = parseFloat(inpa.value);
     myChart.options.scales.x.max = parseFloat(inpb.value);
-    console.log(myChart.data)
+    console.log("aquiiii", myChart.data)
     myChart.update()
 }
 
@@ -218,8 +213,9 @@ function generarTabla(arreglo) {
 anim.addEventListener('click', function() {
     const delay = 100;
     myChart.data.datasets = []
+    graficar(func);
     if (method === 'btnPF'){
-        graficar(func);
+        
 
         //Grafiacar la funcion identidad
         const d = FN.identidad(parseFloat(inpa.value), parseFloat(inpb.value), 20)

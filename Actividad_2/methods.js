@@ -45,11 +45,11 @@ export function fixed_point(opcion, p, tol, i) {
         p1 = gx(p);
 
         // Guardar la quintupla (iteración, p, p1, f(p), error)
-        tabla.push([iteraciones + 1, p, p1, func(p), Math.abs((p1 - p))/2]);
+        tabla.push([iteraciones + 1, p, p1, func(p1), Math.abs((p1 - p))]);
 
-        if (p1 === 0 || Math.abs((p1 - p)) / 2 < tol) break; // Convergencia
+        if (p1 === 0 || Math.abs((p1 - p))  < tol) break; // Convergencia
 
-       p = p1
+        p = p1
 
         iteraciones++;
     }
@@ -147,12 +147,14 @@ export function newton_r(opcion, x, tol, i){
     while (iteraciones < i) {
         xn = x - func(x)/der(x);
 
-        // Guardar la quintupla (iteración, x, xn, f'(x), f(c))
-        tabla.push([iteraciones + 1, x, xn, der(x) , func(x)]);
+        // Guardar la quintupla (iteración, x, xn, f(c))
+        tabla.push([iteraciones + 1, x, xn,  func(xn), Math.abs(xn-x)]);
 
-        if (fc === 0 || Math.abs(xn-x) < tol) break; // Convergencia
+        if (func(x) === 0 || Math.abs(xn-x) < tol) break; // Convergencia
 
+        x= xn
         iteraciones++;
+        
     }
 
     return { raiz: c, tabla };
