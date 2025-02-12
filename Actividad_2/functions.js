@@ -2,7 +2,7 @@
 export function a(a=1, b=3, pasos=50){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: aeva(x) }; 
+        return { x: x, y: Math.pow(x,3) + (4*Math.pow(x,2)) -10 }; 
     });
     // Extrae los valores de y
     const yValues = data.map(point => point.y);
@@ -14,10 +14,7 @@ export function a(a=1, b=3, pasos=50){
     return { data, minY, maxY };
 }
 
-function aeva(x){
-    console.log(x, Math.pow(x,3) , (4*Math.pow(x,2)))
-    return Math.pow(x,3) + (4*Math.pow(x,2)) -10
-}
+
 
 //x3 - 2x2 - 5 
 export function b(a=1, b=4, pasos=30){
@@ -86,13 +83,19 @@ export function e(a=1, b=2.5, pasos=30){
 export function apf(a=1, b=2.5, pasos=30){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: Math.pow(x,3)+ (4*Math.pow(x,2)) -10 }; 
+        return { x: x, y:  Math.pow((10-4*Math.pow(x,2)), (1/3)) }; 
     });
+    console.log(data)
     return data;
 }
 
-export function ades(x){
-    const y = Math.pow((Math.pow(x,3)-10)/4, 0.5);
-    return y
-}
 
+
+export function identidad(a=1, b=3, pasos=50) {
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+    let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+    return { x: x, y: x }; 
+    });
+    // Extrae los valores de y
+    return  data ;
+}

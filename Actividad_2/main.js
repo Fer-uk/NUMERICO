@@ -62,7 +62,7 @@ const config = {
                 }
             },
             zoom: {
-                pan: { enabled: true, mode: 'xy' },
+                pan: { enabled: true, mode: 'xy',modifierKey: 'ctrl'},
                 zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'xy' }
             }
         }
@@ -100,6 +100,27 @@ Array.from(btnfn).forEach(boton => {
             case "btnA":
                 inpa.value = 1;
                 inpb.value = 3;
+                inptol.value = 0.00001;
+            break;
+            case "btnB":
+                inpa.value = 2.5;
+                inpb.value = 3;
+                inptol.value = 0.0001;
+            break;
+            case "btnC":
+                inpa.value = -1;
+                inpb.value = 0;
+                inptol.value = 0.0001;
+            break;
+            case "btnD":
+                inpa.value =  0.7854;
+                inpb.value = 1.5;
+                inptol.value = 0.0001;
+            break;
+            case "btnE":
+                inpa.value = 1.5;
+                inpb.value = 2;
+                inptol.value = 0.00001;
             break;
             default:
             break;
@@ -125,6 +146,16 @@ Array.from(btnmtd).forEach(boton => {
                 intp1.style.display = "none";
                 intp0.value = 1.0
             break;
+            case "btnNR":
+            break;
+            case "btnSC":
+            break;
+            case "btnPF":
+            break;
+            case "btnRF":
+            break;
+            case "btnRFM":
+            break;
             default:
             break;
         }
@@ -138,7 +169,7 @@ function graficar(gr){
     let lab;
     switch (gr) {
         case 'btnA':
-           const { data, minY, maxY }  = FN.a();
+           const { data, minY, maxY }  = FN.a(parseFloat(inpa.value), parseFloat(inpb.value), 100);
            console.log(data)
             miny = minY;
             maxy = maxY
@@ -149,8 +180,6 @@ function graficar(gr){
         default:
             break;
     }
-    
-
     myChart.data.datasets.push({
         label: lab,
         data: dat, // Y values
@@ -159,8 +188,8 @@ function graficar(gr){
         fill: false,
         pointRadius: 0
     });
-    myChart.options.scales.y.min = miny;
-    myChart.options.scales.y.max = maxy;
+    myChart.options.scales.y.min =-10 //miny;
+    myChart.options.scales.y.max =3 //maxy;
     myChart.options.scales.x.min = parseFloat(inpa.value);
     myChart.options.scales.x.max = parseFloat(inpb.value);
     console.log(myChart.data)
@@ -168,10 +197,39 @@ function graficar(gr){
 }
 
 anim.addEventListener('click', function() {
-
+    const delay = 100;
+    myChart.data.datasets = []
     if (method === 'btnPF'){
         graficar(func);
 
+        //Grafiacar la funcion identidad
+        const d = FN.identidad(parseFloat(inpa.value), parseFloat(inpb.value), 20)
+        myChart.data.datasets.push({
+            label: 'identidad',
+            data: d, // Y values
+            borderColor: 'green',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            fill: false,
+            pointRadius: 0
+        });
+
+        console.log("se vieneee")
+        const g = FN.apf(parseFloat(inpa.value), parseFloat(inpb.value), 100);
+        
+
+        myChart.data.datasets.push({
+            label: 'g(x)',
+            data:g,  // Y values
+            borderColor: 'red',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0
+        });
+
+        //Graficar la funcion despejada x=g(x)
+
+        myChart.update()
 
 
 
@@ -179,7 +237,7 @@ anim.addEventListener('click', function() {
 
         let x = 0;
         const step = 1;  // Keep the same number of points
-        const delay = 100; // Slower animation (increase for slower effect)
+         // Slower animation (increase for slower effect)
         /*
         function animateChart() {
             if (x > 100) return; // Stop animation
