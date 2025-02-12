@@ -7,17 +7,25 @@ const funciones = {
 };
 
 const funcionesFixed = {
-    a: x => {
+    a: x => {      // (4x² - 10)^1/3
         let det = (10-4*Math.pow(x,2))
         if (det<0){
             return (-1)*Math.pow((-1)*det, (1/3))
         }
         return Math.pow(det, (1/3))
-    }, // (4x² - 10)^1/3
+    }, 
     b: x => Math.pow(x, 3) - 2 * Math.pow(x, 2) - 5,  // x³ - 2x² - 5
     c: x => Math.pow(x, 3) + 3 * Math.pow(x, 2) - 1,  // x³ + 3x² - 1
     d: x => x - Math.cos(x),  // x - cos(x)
     e: x => Math.exp(x) + Math.pow(2, -x) + 2 * Math.cos(x) - 6  // e^x + 2^(-x) + 2cos(x) - 6
+}
+
+const funcionesDerivadas = {
+    a: x => 3 * Math.pow(x,2) + 8 * x,  // 3x2 + 8x
+    b: x => 3 * Math.pow(x,2) - 4 * x,  // 3x2 - 4x 
+    c: x => 3 * Math.pow(x,2) + 6 * x,  // 3x^2 + 6x 
+    d: x =>  Math.sin(x),  //   sen(x)
+    e: x => Math.exp(x) - Math.log(2) * Math.pow(2, -x) + 2 * Math.cos(x) - 6  // e^x - ln(2) * 2^(-x) - 2cos(x)
 }
 
 export function fixed_point(opcion, p, tol, i) {
@@ -125,4 +133,28 @@ export function false_position(opcion, a, b, tol, i) {
     }
 
     return { raiz: c, tabla };
+}
+
+export function newton_r(opcion, x, tol, i){
+    const func = funciones[opcion];
+    const der = funcionesDerivadas[opcion];
+
+    let iteraciones = 0;
+    let xn;
+    
+    let tabla = []; 
+
+    while (iteraciones < i) {
+        xn = x - func(x)/der(x);
+
+        // Guardar la quintupla (iteración, x, xn, f'(x), f(c))
+        tabla.push([iteraciones + 1, x, xn, der(x) , func(x)]);
+
+        if (fc === 0 || Math.abs(xn-x) < tol) break; // Convergencia
+
+        iteraciones++;
+    }
+
+    return { raiz: c, tabla };
+
 }
