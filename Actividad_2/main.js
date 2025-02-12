@@ -197,6 +197,24 @@ function graficar(gr){
     myChart.update()
 }
 
+function generarTabla(arreglo) {
+    const tabla = document.getElementById("tabla");
+    tabla.innerHTML = ""; // Limpiar tabla antes de generar nueva
+
+    // Crear filas y celdas dinámicamente
+    arreglo.forEach((fila, i) => {
+        let tr = document.createElement("tr");
+
+        fila.forEach(celda => {
+            let elemento = i === 0 ? document.createElement("th") : document.createElement("td");
+            elemento.textContent = celda;
+            tr.appendChild(elemento);
+        });
+
+        tabla.appendChild(tr);
+    });
+}
+
 anim.addEventListener('click', function() {
     const delay = 100;
     myChart.data.datasets = []
@@ -231,8 +249,8 @@ anim.addEventListener('click', function() {
         //Graficar la funcion despejada x=g(x)
 
         myChart.update()
-
-        console.log(MT.fixed_point('a', 1.5, 0.0005, 20))
+        const {raiz, tabla } = MT.fixed_point('a', 1.5, 0.0005, 20)
+        generarTabla(tabla)
 
 
 
@@ -255,5 +273,6 @@ anim.addEventListener('click', function() {
 
         animateChart(); // Start animation*/
     }
+    
     
 });
