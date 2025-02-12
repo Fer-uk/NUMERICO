@@ -83,10 +83,18 @@ export function e(a=1, b=2.5, pasos=30){
 export function apf(a=1, b=2.5, pasos=30){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y:  Math.pow((10-4*Math.pow(x,2)), (1/3)) }; 
+        return { x: x, y:  agx(x) }; 
     });
     console.log(data)
     return data;
+}
+
+function agx(x){
+    let det = (10-4*Math.pow(x,2))
+    if (det<0){
+        return (-1)*Math.pow((-1)*det, (1/3))
+    }
+    return Math.pow(det, (1/3))
 }
 
 

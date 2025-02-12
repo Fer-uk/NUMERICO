@@ -1,4 +1,5 @@
 import * as FN from './functions.js';
+import * as MT from './methods.js';
 
 
 const ctx = document.getElementById('myChart').getContext('2d');
@@ -231,7 +232,7 @@ anim.addEventListener('click', function() {
 
         myChart.update()
 
-
+        console.log(MT.fixed_point('a', 1.5, 0.0005, 20))
 
 
 
