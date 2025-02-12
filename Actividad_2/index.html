@@ -6,35 +6,36 @@
     <title>Slow Animated y = x² Chart</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
 </head>
 <body>
     <div id="controls">
         <div id="functions">
-            <button>x3 + 4x2 -10</button>
-            <button>x3 - 2x2 - 5 </button>
-            <button>x3 + 3x2 - 1</button>
-            <button>x - cos(x)</button>
-            <button>ex + 2-x + 2cos(x) - 6 </button>
+            <button  class="btnfn" id="btnA" >x3 + 4x2 -10</button>
+            <button  class="btnfn" id="btnB" >x3 - 2x2 - 5 </button>
+            <button  class="btnfn" id="btnC" >x3 + 3x2 - 1</button>
+            <button  class="btnfn" id="btnD" >x - cos(x)</button>
+            <button  class="btnfn" id="btnE" >ex + 2-x + 2cos(x) - 6 </button>
         </div>
         <div id="methods">
-            <button>Bisección</button>
-            <button>Newton Raphson</button>
-            <button>Secante</button>
-            <button>Punto Fijo</button>
-            <button>Regla Falsa</button>
-            <button>Regla Falsa M</button>
+            <button class ="btnmtd" id="btnBS">Bisección</button>
+            <button class ="btnmtd" id="btnNR">Newton Raphson</button>
+            <button class ="btnmtd" id="btnSC">Secante</button>
+            <button class ="btnmtd" id="btnPF">Punto Fijo</button>
+            <button class ="btnmtd" id="btnRF">Regla Falsa</button>
+            <button class ="btnmtd" id="btnRFM">Regla Falsa M</button>
         </div>
         <div id="parameters">
             <div id="cont-inter">
                 <span style="padding-bottom: 5px;"> intervalo [ a , b ] </span>
-                <input id="ainput" class="inter" type="text" placeholder="[a">
+                <input id=" " class="inter" type="text" placeholder="[a">
                 <input id="binput" class="inter" type="text" placeholder="b]">
             </div>
 
             <div id="cont-points">
                 <span style="padding-bottom: 5px;"> Puntos iniciales </span>
-                <input id="b0" class="inter" type="text" placeholder="b0">
-                <input id="b1" class="inter" type="text" placeholder="b1">
+                <input id="p0" class="inter" type="text" placeholder="p0">
+                <input id="p1" class="inter" type="text" placeholder="p1">
             </div>
 
             <input id="tol" class="inter" type="text" placeholder="tolerancia">

@@ -78,6 +78,10 @@ const config = {
                         }
                     },
                 }
+            },
+            zoom: {
+                pan: { enabled: true, mode: 'xy' },
+                zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'xy' }
             }
         }
     },
@@ -87,6 +91,49 @@ const myChart = new Chart(ctx, config);
 
 
 const anim = document.getElementById("anim");
+const btnfn = document.getElementsByClassName('btnfn');
+const btnmtd = document.getElementsByClassName('btnmtd');
+const inpa = document.getElementById('ainput');
+const inpb = document.getElementById('binput');
+const inptol = document.getElementById('tol');
+const intp0 = document.getElementById("p0");
+const intp1 = document.getElementById('p1');
+const intmop = document.getElementById('miter');
+let func;
+let method;
+
+
+Array.from(btnfn).forEach(boton => {
+    boton.addEventListener('click', function() {
+        console.log('ID del botón presionado: '+ this.id);
+        if (func){
+            const butant = document.getElementById(func);
+            butant.style.backgroundColor = "#fff";
+            butant.style.color = "#0a0a0a";
+        }
+        func= this.id
+        this.style.backgroundColor = "#0a0a0a";
+        this.style.color = "#fff";
+
+    });
+});
+
+
+Array.from(btnmtd).forEach(boton => {
+    boton.addEventListener('click', function() {
+        console.log('ID del botón presionado: '+ this.id);
+        if (method){
+            const butant = document.getElementById(method);
+            butant.style.backgroundColor = "#fff";
+            butant.style.color = "#0a0a0a";
+        }
+        method= this.id
+        this.style.backgroundColor = "#0a0a0a";
+        this.style.color = "#fff";
+
+        
+    });
+});
 
 anim.addEventListener('click', function() {
     let x = 0;
