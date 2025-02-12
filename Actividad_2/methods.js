@@ -1,9 +1,3 @@
-export function fixed_point(){
-    return
-}
-
-
-
 const funciones = {
     a: x => Math.pow(x, 3) + 4 * Math.pow(x, 2) - 10, // x³ + 4x² - 10
     b: x => Math.pow(x, 3) - 2 * Math.pow(x, 2) - 5,  // x³ - 2x² - 5
@@ -12,7 +6,41 @@ const funciones = {
     e: x => Math.exp(x) + Math.pow(2, -x) + 2 * Math.cos(x) - 6  // e^x + 2^(-x) + 2cos(x) - 6
 };
 
-export function fixed_point() {
+const funcionesFixed = {
+    a: x => Math.pow(x, 3) + 4 * Math.pow(x, 2) - 10, // x³ + 4x² - 10
+    b: x => Math.pow(x, 3) - 2 * Math.pow(x, 2) - 5,  // x³ - 2x² - 5
+    c: x => Math.pow(x, 3) + 3 * Math.pow(x, 2) - 1,  // x³ + 3x² - 1
+    d: x => x - Math.cos(x),  // x - cos(x)
+    e: x => Math.exp(x) + Math.pow(2, -x) + 2 * Math.cos(x) - 6  // e^x + 2^(-x) + 2cos(x) - 6
+}
+
+export function fixed_point(opcion, p, tol, i) {
+    const func = funciones[opcion];
+    const gx = funcionesFixed[opcion];
+
+    if (!func) {
+        console.error("Opción de función no válida.");
+        return null;
+    }
+
+    let iteraciones = 0;
+    let c;
+    let tabla = []; // Almacena las quintuplas de cada iteración
+
+    while (iteraciones < i) {
+        p1 = func(p);
+
+        // Guardar la quintupla (iteración, p, p1, p1, error)
+        tabla.push([iteraciones + 1, p, p1, p1, Math.abs((p1 - a))/2]);
+
+        if (fc === 0 || Math.abs((p1 - a)) / 2 < tol) break; // Convergencia
+
+       p = p1
+
+        iteraciones++;
+    }
+    return { raiz: p, tabla };
+
     return
 }
 
