@@ -293,6 +293,7 @@ anim.addEventListener('click', function() {
         tablaG=tabla;
 
         generarTabla(tabla)
+        slider.max = tabla.length-1;
         //Agregar el punto que ira animando atravez del tiempo
         myChart.data.datasets.push({
             label: 'x' + parseFloat(tabla[1][1]),
@@ -351,7 +352,13 @@ anim.addEventListener('click', function() {
             slider.value = parseInt(tabla[x][0])
             sliderValue.textContent = slider.value;
             //Actualizar labels
-            lblraiz.textContent = 'Raiz: ' + tabla[x][1];
+           
+            console.log(tabla.length-1, x)
+            if (tabla[x][4]>parseFloat(inptol.value) && x==tabla.length-1){
+                lblraiz.textContent = 'Raiz: sin resultado';
+            }else{
+                lblraiz.textContent = 'Raiz: ' + tabla[x][1];
+            }
             lblerr.textContent = 'Error absoluto: ' + tabla[x][4];
             
             //Actualizar la posicion del punto
