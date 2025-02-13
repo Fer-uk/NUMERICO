@@ -20,7 +20,7 @@ export function a(a=1, b=3, pasos=50){
 export function b(a=1, b=4, pasos=30){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
-        return { x: x, y: Math.pow(x,3)+ (2*Math.pow(x,2)) -5 }; 
+        return { x: x, y: Math.pow(x,3)- (2*Math.pow(x,2)) -5 }; 
     });
     // Extrae los valores de y
     const yValues = data.map(point => point.y);

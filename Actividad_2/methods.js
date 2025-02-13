@@ -157,6 +157,6 @@ export function newton_r(opcion, x, tol, i){
         
     }
 
-    return { raiz: c, tabla };
+    return { raiz: xn, tabla };
 
 }

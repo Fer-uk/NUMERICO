@@ -5,6 +5,7 @@ import * as MT from './methods.js';
 const ctx = document.getElementById('myChart').getContext('2d');
 
 
+//Funciones para obtener el arreglo de coordenadas y graficar
 const funciones = {
     a: (a, b, pas) => FN.a(a, b, pas),  // x³ - 2x² - 5
     b: (a, b, pas) => FN.b(a, b, pas),  // x³ + 3x² - 1
@@ -13,7 +14,17 @@ const funciones = {
     e: (a, b, pas) => FN.e(a, b, pas)  // e^x + 2^(-x) + 2cos(x) - 6
 };
 
+//valores por default al seleccionar una funcion
+const defaultFN = {
+    // a   b   tol     iteraciones maximas
+    a: [1, 3, 0.00001, 20],  // x³ - 2x² - 5
+    b: [2.5, 3, 0.00001, 20],  // x³ + 3x² - 1
+    c: [-1, 0 , 0.00001, 20],  // x - cos(x)
+    d: [0, 1.5707, 0.0001, 20],
+    e: [1.5, 2, 0.00001, 20]  // e^x + 2^(-x) + 2cos(x) - 6
+};
 
+//configuracion de la grafica
 const config = {
     type: 'line',
     data: {},
@@ -83,6 +94,7 @@ const myChart = new Chart(ctx, config);
 
 
 const anim = document.getElementById("anim");
+const btngraf = document.getElementById("graf");
 const btnfn = document.getElementsByClassName('btnfn');
 const btnmtd = document.getElementsByClassName('btnmtd');
 const inpa = document.getElementById('ainput');
@@ -91,6 +103,7 @@ const inptol = document.getElementById('tol');
 const intp0 = document.getElementById("p0");
 const intp1 = document.getElementById('p1');
 const intmop = document.getElementById('miter');
+const lblraiz = document.getElementById('lblraiz');
 let func;
 let method;
 
@@ -106,35 +119,10 @@ Array.from(btnfn).forEach(boton => {
         func= this.id
         this.style.backgroundColor = "#0a0a0a";
         this.style.color = "#fff";
-        switch (this.id){
-            case "a":
-                inpa.value = 1;
-                inpb.value = 3;
-                inptol.value = 0.00001;
-            break;
-            case "b":
-                inpa.value = 2.5;
-                inpb.value = 3;
-                inptol.value = 0.0001;
-            break;
-            case "c":
-                inpa.value = -1;
-                inpb.value = 0;
-                inptol.value = 0.0001;
-            break;
-            case "d":
-                inpa.value =  0.7854;
-                inpb.value = 1.5;
-                inptol.value = 0.0001;
-            break;
-            case "e":
-                inpa.value = 1.5;
-                inpb.value = 2;
-                inptol.value = 0.00001;
-            break;
-            default:
-            break;
-        }
+        inpa.value = defaultFN[this.id][0];
+        inpb.value =  defaultFN[this.id][1];
+        inptol.value =  defaultFN[this.id][2];
+        intmop.value = defaultFN[this.id][3];
 
     });
 });
@@ -151,24 +139,12 @@ Array.from(btnmtd).forEach(boton => {
         method= this.id
         this.style.backgroundColor = "#0a0a0a";
         this.style.color = "#fff";
-        switch (this.id){
-            case 'btnPF': 
-                intp1.style.display = "none";
-                intp0.value = 1.0
-            break;
-            case "btnNR":
-            break;
-            case "btnSC":
-            break;
-            case "btnPF":
-            break;
-            case "btnRF":
-            break;
-            case "btnRFM":
-            break;
-            default:
-            break;
+        if (this.id === 'btnPF' || this.id === 'btnNR'){
+            intp1.style.display = "none";
+        }else{
+            intp1.style.display = "";
         }
+        
     });
 });
 
@@ -184,8 +160,8 @@ function graficar(gr){
         fill: false,
         pointRadius: 0
     });
-    myChart.options.scales.y.min =-10 //miny;
-    myChart.options.scales.y.max =3 //maxy;
+    myChart.options.scales.y.min =minY //miny;
+    myChart.options.scales.y.max =maxY//maxy;
     myChart.options.scales.x.min = parseFloat(inpa.value);
     myChart.options.scales.x.max = parseFloat(inpb.value);
     console.log("aquiiii", myChart.data)
@@ -210,10 +186,14 @@ function generarTabla(arreglo) {
     });
 }
 
+btngraf.addEventListener('click',function() {
+    myChart.data.datasets = []
+    graficar(func);
+});
+
 anim.addEventListener('click', function() {
     const delay = 100;
     myChart.data.datasets = []
-    graficar(func);
     if (method === 'btnPF'){
         
 
@@ -272,6 +252,10 @@ anim.addEventListener('click', function() {
 
     if (method === 'btnNR'){
         const {raiz, tabla } = MT.newton_r(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
+        console.log(raiz)
+        tabla.unshift(['i', 'x', 'xn', 'f(x)', 'Ea'])
+        console.log(tabla)
+        lblraiz.textContent = 'Raiz: ' + raiz;
         generarTabla(tabla)
     }
     
