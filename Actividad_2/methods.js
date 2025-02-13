@@ -7,17 +7,23 @@ const funciones = {
 };
 
 const funcionesFixed = {
-    a: x => {      // (4x² - 10)^1/3
+    a: x => {      // ( 10-4x²)^1/3
         let det = (10-4*Math.pow(x,2))
         if (det<0){
             return (-1)*Math.pow((-1)*det, (1/3))
         }
         return Math.pow(det, (1/3))
     }, 
-    b: x => Math.pow(x, 3) - 2 * Math.pow(x, 2) - 5,  // x³ - 2x² - 5
-    c: x => Math.pow(x, 3) + 3 * Math.pow(x, 2) - 1,  // x³ + 3x² - 1
-    d: x => x - Math.cos(x),  // x - cos(x)
-    e: x => Math.exp(x) + Math.pow(2, -x) + 2 * Math.cos(x) - 6  // e^x + 2^(-x) + 2cos(x) - 6
+    b: x => Math.pow((2*Math.pow(x,2)+5), (1/3) ),  // ( 2x² + 5)^(1/3)
+    c: x => {      // (1-3x² )^1/3
+        let det = (1-3*Math.pow(x,2))
+        if (det<0){
+            return (-1)*Math.pow((-1)*det, (1/3))
+        }
+        return Math.pow(det, (1/3))
+    },  
+    d: x =>  Math.cos(x),  //  cos(x)
+    e: x => Math.exp(x) + Math.pow(2, -x) + 2 * Math.cos(x) - 6 +x  // e^x + 2^(-x) + 2cos(x) - 6 + x
 }
 
 const funcionesDerivadas = {

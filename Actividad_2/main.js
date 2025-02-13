@@ -14,6 +14,14 @@ const funciones = {
     e: (a, b, pas) => FN.e(a, b, pas)  // e^x + 2^(-x) + 2cos(x) - 6
 };
 
+const Gfunciones = {
+    a: (a, b, pas) => FN.apf(a, b, pas),  // (10-4x² )^1/3
+    b: (a, b, pas) => FN.bpf(a, b, pas),  // ( 2x² + 5)^(1/3)
+    c: (a, b, pas) => FN.cpf(a, b, pas),   // (1-3x² )^1/3
+    d: (a, b, pas) => FN.dpf(a, b, pas), //cos(x)
+    e: (a, b, pas) => FN.epf(a, b, pas)  // e^x + 2^(-x) + 2cos(x) - 6 + x
+}
+
 //valores por default al seleccionar una funcion
 const defaultFN = {
     // a   b   tol     iteraciones maximas
@@ -293,6 +301,91 @@ btngraf.addEventListener('click',function() {
     //LIMPIAR GRAFICA
     resetF();
     graficar(func);
+    if (method === 'btnPF'){
+        const {raiz, tabla } = MT.fixed_point(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
+        tabla.unshift(['i', 'p', 'p1', 'g(x)', 'f(x)', 'Ea']);
+        tablaG=tabla;
+
+        generarTabla(tabla)
+        slider.max = tabla.length-1;
+        //Agregar el punto que ira animando atravez del tiempo
+        myChart.data.datasets.push({
+            label: 'x' + parseFloat(tabla[1][1]),
+            data: [{x:parseFloat(tabla[1][1]), y : 0}], // Y values
+            borderColor: 'red',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 2
+        });
+        //Graficar xn
+        myChart.data.datasets.push({
+            label: 'xn',
+            data: [], // Y values
+            borderColor: 'rgb(0, 255, 255)',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 2
+        });
+        
+        //Graficar xn
+        myChart.data.datasets.push({
+            label: 'g(x)',
+            data: [], // Y values
+            borderColor: 'rgb(234, 0, 255)',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 2
+        });
+        //Grafiacar la funcion identidad
+        const d = FN.identidad(parseFloat(inpa.value), parseFloat(inpb.value), 20)
+        myChart.data.datasets.push({
+            label: 'identidad',
+            data: d, // Y values
+            borderColor: 'green',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            fill: false,
+            pointRadius: 0
+        });
+
+        //Graficar la funcion despejada x=g(x)
+        const g =Gfunciones[func](parseFloat(inpa.value), parseFloat(inpb.value), 100) 
+        myChart.data.datasets.push({
+            label: 'g(x)',
+            data:g,  // Y values
+            borderColor: 'red',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0
+        });
+        const x = slider.value;
+         
+        //Actualizar labels
+        
+        actlblRaiz(tablaG[x][5], tablaG[x][1], tablaG.length-1, x)
+        lblerr.textContent = 'Error absoluto: ' + tablaG[x][5];
+        
+        //Actualizar la posicion del punto
+        myChart.data.datasets[1].label = 'x = ' + parseFloat(tablaG[x][1]).toFixed(5);
+        myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][1]), y : 0}];
+        myChart.data.datasets[2].label = 'xn = ' + parseFloat(tablaG[x][2]).toFixed(5);
+        myChart.data.datasets[2].data =  [{x:parseFloat(tablaG[x][2]), y : 0}];
+        myChart.data.datasets[3].label= 'g(x) =' + parseFloat(tablaG[x][3]).toFixed(5)
+        myChart.data.datasets[3].data=[{x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][3])},]
+
+        //Linea de p a g(x) vertical rline
+        graphVerticalLine('rline',0, parseFloat(tablaG[x][3]), parseFloat(tablaG[x][1]) );
+
+        //Linea de g(x) a identidad horizontal gline
+        graphHorizontalLine('gline', parseFloat(tablaG[x][1]), parseFloat(tablaG[x][2]), parseFloat(tablaG[x][2]));
+        
+        
+        //Linea de identidad a p1 vertical tline
+        graphVerticalLine('tline',0, parseFloat(tablaG[x][3]), parseFloat(tablaG[x][2]) );
+
+    
+        myChart.update();
+    }
 });
 
 anim.addEventListener('click', function() {
@@ -347,7 +440,7 @@ anim.addEventListener('click', function() {
         });
 
         //Graficar la funcion despejada x=g(x)
-        const g = FN.apf(parseFloat(inpa.value), parseFloat(inpb.value), 100);
+        const g =Gfunciones[func](parseFloat(inpa.value), parseFloat(inpb.value), 100) 
         myChart.data.datasets.push({
             label: 'g(x)',
             data:g,  // Y values
@@ -365,8 +458,8 @@ anim.addEventListener('click', function() {
             sliderValue.textContent = slider.value;
             //Actualizar labels
            
-            actlblRaiz(tabla[x][4], tabla[x][1], tabla.length-1, x)
-            lblerr.textContent = 'Error absoluto: ' + tabla[x][4];
+            actlblRaiz(tabla[x][5], tabla[x][1], tabla.length-1, x)
+            lblerr.textContent = 'Error absoluto: ' + tabla[x][5];
             
             //Actualizar la posicion del punto
             myChart.data.datasets[1].label = 'x = ' + parseFloat(tabla[x][1]).toFixed(5);
@@ -559,7 +652,6 @@ slider.addEventListener("input", function() {
     if (tablaG){
         
         if(method === 'btnNR'){
-            console.log('entroooooo')
             const x = slider.value;
             //Actualizar labels
             actlblRaiz(tablaG[x][4], tablaG[x][1], tablaG.length-1, x)
@@ -586,8 +678,8 @@ slider.addEventListener("input", function() {
          
             //Actualizar labels
            
-            actlblRaiz(tablaG[x][4], tablaG[x][1], tablaG.length-1, x)
-            lblerr.textContent = 'Error absoluto: ' + tablaG[x][4];
+            actlblRaiz(tablaG[x][5], tablaG[x][1], tablaG.length-1, x)
+            lblerr.textContent = 'Error absoluto: ' + tablaG[x][5];
             
             //Actualizar la posicion del punto
             myChart.data.datasets[1].label = 'x = ' + parseFloat(tablaG[x][1]).toFixed(5);

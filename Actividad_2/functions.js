@@ -64,7 +64,7 @@ export function d(a=0, b=1.57, pasos=30){
     return { data, minY, maxY };
 }
 
-//ex + 2-x + 2cos(x) – 6 
+//ex + 2^(-x) + 2cos(x) – 6 
 export function e(a=1, b=2.5, pasos=30){
     const data = Array.from({ length: pasos + 1 }, (_, i) => {
         let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
@@ -95,6 +95,46 @@ function agx(x){
         return (-1)*Math.pow((-1)*det, (1/3))
     }
     return Math.pow(det, (1/3))
+}
+
+export function bpf(a=1, b=2.5, pasos=30){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: Math.pow((2*Math.pow(x,2)+5), (1/3) ) }; 
+    });
+    return  data;
+}
+
+export function cpf(a=1, b=2.5, pasos=30){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: cgx(x) }; 
+    });
+    return  data;
+}
+
+function cgx(x){
+    let det = (1-3*Math.pow(x,2))
+    if (det<0){
+        return (-1)*Math.pow((-1)*det, (1/3))
+    }
+    return Math.pow(det, (1/3))
+}
+
+export function dpf(a=1, b=2.5, pasos=30){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: Math.cos(x) }; 
+    });
+    return  data;
+}
+
+export function epf(a=1, b=2.5, pasos=30){
+    const data = Array.from({ length: pasos + 1 }, (_, i) => {
+        let x = a + (i * (b - a) / pasos); // Genera valores equidistantes entre a y b
+        return { x: x, y: Math.exp(x) + Math.pow(2,-x) + (2*Math.cos(x))- 6 +x}; 
+    });
+    return  data;
 }
 
 
