@@ -192,8 +192,8 @@ btngraf.addEventListener('click',function() {
 });
 
 anim.addEventListener('click', function() {
-    const delay = 100;
-    myChart.data.datasets = []
+    const delay = 1000;   // Slower animation (increase for slower effect)
+    
     if (method === 'btnPF'){
         
 
@@ -227,27 +227,6 @@ anim.addEventListener('click', function() {
         myChart.update()
         const {raiz, tabla } = MT.fixed_point(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
         generarTabla(tabla)
-
-
-
-        let x = 0;
-        const step = 1;  // Keep the same number of points
-         // Slower animation (increase for slower effect)
-        /*
-        function animateChart() {
-            if (x > 100) return; // Stop animation
-
-            chartData.datasets[0].label = 'grado: '+ x;
-            chartData.datasets[0].data = exT(0,10,10, x);
-
-            myChart.update();
-
-            x += step; 
-
-            setTimeout(animateChart, delay); // Add delay
-        }
-
-        animateChart(); // Start animation*/
     }
 
     if (method === 'btnNR'){
@@ -257,6 +236,31 @@ anim.addEventListener('click', function() {
         console.log(tabla)
         lblraiz.textContent = 'Raiz: ' + raiz;
         generarTabla(tabla)
+        myChart.data.datasets.push({
+            label: 'aprx' + parseFloat(tabla[1][1]),
+            data: [{x:parseFloat(tabla[1][1]), y : 0}], // Y values
+            borderColor: 'red',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 2
+        });
+
+        let x = 1;
+       
+        
+        function animateChart() {
+            if (x > tabla.length-1) return; // Stop animation
+
+            myChart.data.datasets[1].label = 'aprx' + parseFloat(tabla[x][1]);
+            myChart.data.datasets[1].data =  [{x:parseFloat(tabla[x][1]), y : 0}];
+            myChart.update();
+
+            x += 1; 
+
+            setTimeout(animateChart, delay); // Add delay
+        }
+
+        animateChart(); // Start animation
     }
     
     
