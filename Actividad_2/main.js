@@ -106,7 +106,7 @@ const config = {
 
 const myChart = new Chart(ctx, config);
 
-
+//Variables para el manejo del programa
 const anim = document.getElementById("anim");
 const btngraf = document.getElementById("graf");
 const btnfn = document.getElementsByClassName('btnfn');
@@ -122,6 +122,7 @@ let slider = document.getElementById("slider");
 let sliderValue = document.getElementById("sliderV");
 let func;
 let method;
+let tablaG;
 
 
 Array.from(btnfn).forEach(boton => {
@@ -259,6 +260,7 @@ anim.addEventListener('click', function() {
     if (method === 'btnNR'){
         const {raiz, tabla } = MT.newton_r(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
         console.log(raiz)
+        tablaG =tabla;
         tabla.unshift(['i', 'x', 'xn', 'f(x)', 'Ea'])
         console.log(tabla)
         lblraiz.textContent = 'Raiz: ' + raiz;
@@ -300,7 +302,8 @@ anim.addEventListener('click', function() {
         
         function animateChart() {
             if (x > tabla.length-1) return; // Stop animation
-
+            slider.value = parseInt(tabla[x][0])
+            sliderValue.textContent = slider.value;
             //Actualizar la posicion del punto
             myChart.data.datasets[1].label = 'x' + parseFloat(tabla[x][1]).toFixed(5);
             myChart.data.datasets[1].data =  [{x:parseFloat(tabla[x][1]), y : 0}];
@@ -338,4 +341,33 @@ anim.addEventListener('click', function() {
 
 slider.addEventListener("input", function() {
     sliderValue.textContent = slider.value; // Change the value of <a>
+    if (tablaG){
+        
+        if(method === 'btnNR'){
+            console.log('entroooooo')
+            const x = slider.value;
+            //Actualizar la posicion del punto
+            myChart.data.datasets[1].label = 'x' + parseFloat(tablaG[x][1]).toFixed(5);
+            myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][1]), y : 0}];
+            myChart.data.datasets[2].label = 'xn' + parseFloat(tablaG[x][2]).toFixed(5);
+            myChart.data.datasets[2].data =  [{x:parseFloat(tablaG[x][2]), y : 0}];
+            myChart.data.datasets[3].data=[
+                {x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][3])},
+                {x:parseFloat(tablaG[x][2]), y : 0}
+            ]
+
+            //lINEA DE X A la recta tangente
+            myChart.options.plugins.annotation.annotations['rline'].xMin =parseFloat(tablaG[x][1])
+            myChart.options.plugins.annotation.annotations['rline'].xMax =parseFloat(tablaG[x][1])
+            if (parseFloat(tablaG[x][3])<0){
+                myChart.options.plugins.annotation.annotations['rline'].yMax = 0;
+                myChart.options.plugins.annotation.annotations['rline'].yMin =parseFloat(tablaG[x][3]);    
+            }else{
+                myChart.options.plugins.annotation.annotations['rline'].yMin = 0;
+                myChart.options.plugins.annotation.annotations['rline'].yMax =parseFloat(tablaG[x][3]);
+                
+            }
+            myChart.update();
+        }
+    }
 });
