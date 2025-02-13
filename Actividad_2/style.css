@@ -176,3 +176,14 @@ input{
     width: 60px;
     margin-left: 5px;
 }
+
+#lbl{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#err{
+    width: 50%;
+}

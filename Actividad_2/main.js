@@ -123,6 +123,7 @@ let sliderValue = document.getElementById("sliderV");
 let func;
 let method;
 let tablaG;
+const lblerr = document.getElementById('lblerr');
 
 
 Array.from(btnfn).forEach(boton => {
@@ -263,7 +264,8 @@ anim.addEventListener('click', function() {
         tablaG =tabla;
         tabla.unshift(['i', 'x', 'xn', 'f(x)', 'Ea'])
         console.log(tabla)
-        lblraiz.textContent = 'Raiz: ' + raiz;
+        lblraiz.textContent = 'Raiz: ' + tabla[1][1];
+        lblerr.textContent = 'Error absoluto:: ' + tabla[1][4];
         generarTabla(tabla)
         //Agregar el punto que ira animando atravez del tiempo
         myChart.data.datasets.push({
@@ -288,7 +290,7 @@ anim.addEventListener('click', function() {
         myChart.data.datasets.push({
             label: 'tangente',
             data: [], // Y values
-            borderColor: 'rgba(66, 255, 41, 0.51)',
+            borderColor: 'rgba(30, 255, 0, 0.73)',
             borderWidth: 2,
             fill: false,
             pointRadius: 0
@@ -304,10 +306,13 @@ anim.addEventListener('click', function() {
             if (x > tabla.length-1) return; // Stop animation
             slider.value = parseInt(tabla[x][0])
             sliderValue.textContent = slider.value;
+            //Actualizar labels
+            lblraiz.textContent = 'Raiz: ' + tabla[x][1];
+            lblerr.textContent = 'Error absoluto: ' + tabla[x][4];
             //Actualizar la posicion del punto
-            myChart.data.datasets[1].label = 'x' + parseFloat(tabla[x][1]).toFixed(5);
+            myChart.data.datasets[1].label = 'x = ' + parseFloat(tabla[x][1]).toFixed(5);
             myChart.data.datasets[1].data =  [{x:parseFloat(tabla[x][1]), y : 0}];
-            myChart.data.datasets[2].label = 'xn' + parseFloat(tabla[x][2]).toFixed(5);
+            myChart.data.datasets[2].label = 'xn = ' + parseFloat(tabla[x][2]).toFixed(5);
             myChart.data.datasets[2].data =  [{x:parseFloat(tabla[x][2]), y : 0}];
             myChart.data.datasets[3].data=[
                 {x:parseFloat(tabla[x][1]), y : parseFloat(tabla[x][3])},
@@ -346,10 +351,13 @@ slider.addEventListener("input", function() {
         if(method === 'btnNR'){
             console.log('entroooooo')
             const x = slider.value;
+            //Actualizar labels
+            lblraiz.textContent = 'Raiz: ' + tablaG[x][1];
+            lblerr.textContent = 'Error absoluto: ' + tablaG[x][4];
             //Actualizar la posicion del punto
-            myChart.data.datasets[1].label = 'x' + parseFloat(tablaG[x][1]).toFixed(5);
+            myChart.data.datasets[1].label = 'x = ' + parseFloat(tablaG[x][1]).toFixed(5);
             myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][1]), y : 0}];
-            myChart.data.datasets[2].label = 'xn' + parseFloat(tablaG[x][2]).toFixed(5);
+            myChart.data.datasets[2].label = 'xn =' + parseFloat(tablaG[x][2]).toFixed(5);
             myChart.data.datasets[2].data =  [{x:parseFloat(tablaG[x][2]), y : 0}];
             myChart.data.datasets[3].data=[
                 {x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][3])},
