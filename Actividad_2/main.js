@@ -60,7 +60,6 @@ const config = {
                         xMax: 0,
                         borderColor: 'black', // Color de la línea
                         borderWidth: 1, // Grosor de la línea
-                    // borderDash: [5, 5], // Línea punteada (opcional)
                         label: {
                         content: 'x = 2',
                         enabled: true,
@@ -73,7 +72,22 @@ const config = {
                         yMax: 0,
                         borderColor: 'black', // Color de la línea
                         borderWidth: 1, // Grosor de la línea
-                    // borderDash: [5, 5], // Línea punteada (opcional)
+                    
+                        label: {
+                        content: 'x = 2',
+                        enabled: true,
+                        position: 'top'
+                        }
+                    },
+                    rline: { //linea de apoyo
+                        type: 'line',
+                        xMin: -100000, // Posición de la línea vertical
+                        xMax: -100000,
+                        yMin: NaN,
+                        yMax: NaN,
+                        borderColor: 'rgb(162, 0, 255)', // Color de la línea
+                        borderWidth: 1, // Grosor de la línea
+                        borderDash: [5, 5], // Línea punteada (opcional)
                         label: {
                         content: 'x = 2',
                         enabled: true,
@@ -104,6 +118,8 @@ const intp0 = document.getElementById("p0");
 const intp1 = document.getElementById('p1');
 const intmop = document.getElementById('miter');
 const lblraiz = document.getElementById('lblraiz');
+let slider = document.getElementById("slider");
+let sliderValue = document.getElementById("sliderV");
 let func;
 let method;
 
@@ -187,13 +203,24 @@ function generarTabla(arreglo) {
 }
 
 btngraf.addEventListener('click',function() {
+    //Limpiar los datos anteriores
     myChart.data.datasets = []
+    myChart.options.plugins.annotation.annotations['rline'].xMin = -100000;
+    myChart.options.plugins.annotation.annotations['rline'].xMax = -100000;
+    myChart.options.plugins.annotation.annotations['rline'].yMin = NaN;
+    myChart.options.plugins.annotation.annotations['rline'].yMax = NaN;
     graficar(func);
 });
 
 anim.addEventListener('click', function() {
     const delay = 1000;   // Slower animation (increase for slower effect)
-    
+    //Limpiar todo lo anterior
+    myChart.data.datasets = []
+    myChart.options.plugins.annotation.annotations['rline'].xMin = -100000;
+    myChart.options.plugins.annotation.annotations['rline'].xMax = -100000;
+    myChart.options.plugins.annotation.annotations['rline'].yMin = NaN;
+    myChart.options.plugins.annotation.annotations['rline'].yMax = NaN;
+    graficar(func);
     if (method === 'btnPF'){
         
 
@@ -236,14 +263,37 @@ anim.addEventListener('click', function() {
         console.log(tabla)
         lblraiz.textContent = 'Raiz: ' + raiz;
         generarTabla(tabla)
+        //Agregar el punto que ira animando atravez del tiempo
         myChart.data.datasets.push({
-            label: 'aprx' + parseFloat(tabla[1][1]),
+            label: 'x' + parseFloat(tabla[1][1]),
             data: [{x:parseFloat(tabla[1][1]), y : 0}], // Y values
             borderColor: 'red',
             borderWidth: 2,
             fill: false,
             pointRadius: 2
         });
+        //Graficar xn
+        myChart.data.datasets.push({
+            label: 'xn',
+            data: [], // Y values
+            borderColor: 'rgb(0, 255, 255)',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 2
+        });
+
+        //Agregar la linea tangente que ira mostrandose a traves del tiempo
+        myChart.data.datasets.push({
+            label: 'tangente',
+            data: [], // Y values
+            borderColor: 'rgba(66, 255, 41, 0.51)',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0
+        });
+
+       
+        slider.max = tabla.length-1;
 
         let x = 1;
        
@@ -251,8 +301,27 @@ anim.addEventListener('click', function() {
         function animateChart() {
             if (x > tabla.length-1) return; // Stop animation
 
-            myChart.data.datasets[1].label = 'aprx' + parseFloat(tabla[x][1]);
+            //Actualizar la posicion del punto
+            myChart.data.datasets[1].label = 'x' + parseFloat(tabla[x][1]).toFixed(5);
             myChart.data.datasets[1].data =  [{x:parseFloat(tabla[x][1]), y : 0}];
+            myChart.data.datasets[2].label = 'xn' + parseFloat(tabla[x][2]).toFixed(5);
+            myChart.data.datasets[2].data =  [{x:parseFloat(tabla[x][2]), y : 0}];
+            myChart.data.datasets[3].data=[
+                {x:parseFloat(tabla[x][1]), y : parseFloat(tabla[x][3])},
+                {x:parseFloat(tabla[x][2]), y : 0}
+            ]
+
+            //lINEA DE X A la recta tangente
+            myChart.options.plugins.annotation.annotations['rline'].xMin =parseFloat(tabla[x][1])
+            myChart.options.plugins.annotation.annotations['rline'].xMax =parseFloat(tabla[x][1])
+            if (parseFloat(tabla[x][3])<0){
+                myChart.options.plugins.annotation.annotations['rline'].yMax = 0;
+                myChart.options.plugins.annotation.annotations['rline'].yMin =parseFloat(tabla[x][3]);    
+            }else{
+                myChart.options.plugins.annotation.annotations['rline'].yMin = 0;
+                myChart.options.plugins.annotation.annotations['rline'].yMax =parseFloat(tabla[x][3]);
+                
+            }
             myChart.update();
 
             x += 1; 
@@ -264,4 +333,9 @@ anim.addEventListener('click', function() {
     }
     
     
+});
+
+
+slider.addEventListener("input", function() {
+    sliderValue.textContent = slider.value; // Change the value of <a>
 });

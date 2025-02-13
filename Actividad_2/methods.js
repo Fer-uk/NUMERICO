@@ -148,7 +148,7 @@ export function newton_r(opcion, x, tol, i){
         xn = x - func(x)/der(x);
 
         // Guardar la quintupla (iteración, x, xn, f(c))
-        tabla.push([iteraciones + 1, x, xn,  func(xn), Math.abs(xn-x)]);
+        tabla.push([iteraciones + 1, x, xn,  func(x), Math.abs(xn-x)]);
 
         if (func(x) === 0 || Math.abs(xn-x) < tol) break; // Convergencia
 
