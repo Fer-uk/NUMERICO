@@ -126,6 +126,34 @@ tr:last-child td:last-child {
     transition: all 0.2s ease;
 }
 
+#topT{
+    
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #0a0a0a;
+}
+
+#menu_title{
+
+    display: flex;
+    height: inherit;
+    width: 15%;
+    align-items: center;
+    justify-content: center;
+    background-color: #0a0a0a;
+    color: #fff;
+    text-align: center;
+    font-weight: 600;
+
+}
+
+
+
+#title{
+    padding: 2%;
+}
 .fnc{
     
     display: flex;
