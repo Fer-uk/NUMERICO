@@ -129,12 +129,12 @@ Array.from(btnfn).forEach(boton => {
         console.log('ID del botón presionado: '+ this.id);
         if (func){
             const butant = document.getElementById(func);
-            butant.style.backgroundColor = "#fff";
-            butant.style.color = "#0a0a0a";
+            butant.style.backgroundColor = ' rgb(141, 209, 38)';
+            
         }
         func= this.id
         this.style.backgroundColor = "#0a0a0a";
-        this.style.color = "#fff";
+       
         inpa.value = defaultFN[this.id][0];
         inpb.value =  defaultFN[this.id][1];
         inptol.value =  defaultFN[this.id][2];
@@ -149,12 +149,12 @@ Array.from(btnmtd).forEach(boton => {
         console.log('ID del botón presionado: '+ this.id);
         if (method){
             const butant = document.getElementById(method);
-            butant.style.backgroundColor = "#fff";
-            butant.style.color = "#0a0a0a";
+            butant.style.backgroundColor = " rgb(141, 209, 38)";
+           
         }
         method= this.id
         this.style.backgroundColor = "#0a0a0a";
-        this.style.color = "#fff";
+       
         if (this.id === 'btnPF' || this.id === 'btnNR'){
             intp1.style.display = "none";
         }else{
