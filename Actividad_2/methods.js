@@ -79,8 +79,8 @@ export function bisection(opcion, a, b, tol, i) {
         c = (a + b) / 2;
         let fc = func(c);
 
-        // Guardar la quintupla (iteración, a, b, c, f(c))
-        tabla.push([iteraciones + 1, a, b, c, fc]);
+        // Guardar la quintupla (iteración, a, b, c, f(c), inter)
+        tabla.push([iteraciones + 1, a, b, c, fc, (b - a) / 2]);
 
         if (fc === 0 || (b - a) / 2 < tol) break; // Convergencia
 

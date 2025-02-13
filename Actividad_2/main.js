@@ -177,6 +177,17 @@ function graphVerticalLine(line, y, y1, x){
       
 }
 
+function actlblRaiz(er, raiz, tot, x){
+    console.log(er, parseFloat(inptol.value), x, tot)
+    if (Math.abs(er)>parseFloat(inptol.value) && x==tot){
+        lblraiz.textContent = 'Raiz: sin resultado';
+        console.log("ENTRO");
+    }else{
+        lblraiz.textContent = 'Raiz: ' + raiz;
+        console.log('raiz')
+    }
+}
+
 const myChart = new Chart(ctx, config);
 
 //Variables para el manejo del programa
@@ -193,10 +204,11 @@ const intmop = document.getElementById('miter');
 const lblraiz = document.getElementById('lblraiz');
 let slider = document.getElementById("slider");
 let sliderValue = document.getElementById("sliderV");
+const lblerr = document.getElementById('lblerr');
 let func;
 let method;
 let tablaG;
-const lblerr = document.getElementById('lblerr');
+let lineheight;
 
 
 Array.from(btnfn).forEach(boton => {
@@ -353,12 +365,7 @@ anim.addEventListener('click', function() {
             sliderValue.textContent = slider.value;
             //Actualizar labels
            
-            console.log(tabla.length-1, x)
-            if (tabla[x][4]>parseFloat(inptol.value) && x==tabla.length-1){
-                lblraiz.textContent = 'Raiz: sin resultado';
-            }else{
-                lblraiz.textContent = 'Raiz: ' + tabla[x][1];
-            }
+            actlblRaiz(tabla[x][4], tabla[x][1], tabla.length-1, x)
             lblerr.textContent = 'Error absoluto: ' + tabla[x][4];
             
             //Actualizar la posicion del punto
@@ -379,19 +386,7 @@ anim.addEventListener('click', function() {
             //Linea de identidad a p1 vertical tline
             graphVerticalLine('tline',0, parseFloat(tabla[x][3]), parseFloat(tabla[x][2]) );
 
-            
-
-            /*lINEA DE X A la recta tangente
-            myChart.options.plugins.annotation.annotations['rline'].xMin =parseFloat(tabla[x][1])
-            myChart.options.plugins.annotation.annotations['rline'].xMax =parseFloat(tabla[x][1])
-            if (parseFloat(tabla[x][3])<0){
-                myChart.options.plugins.annotation.annotations['rline'].yMax = 0;
-                myChart.options.plugins.annotation.annotations['rline'].yMin =parseFloat(tabla[x][3]);    
-            }else{
-                myChart.options.plugins.annotation.annotations['rline'].yMin = 0;
-                myChart.options.plugins.annotation.annotations['rline'].yMax =parseFloat(tabla[x][3]);
-                
-            }*/
+        
             myChart.update();
 
             x += 1; 
@@ -450,7 +445,7 @@ anim.addEventListener('click', function() {
             slider.value = parseInt(tabla[x][0])
             sliderValue.textContent = slider.value;
             //Actualizar labels
-            lblraiz.textContent = 'Raiz: ' + tabla[x][1];
+            actlblRaiz(tabla[x][4], tabla[x][1], tabla.length-1, x)
             lblerr.textContent = 'Error absoluto: ' + tabla[x][4];
             //Actualizar la posicion del punto
             myChart.data.datasets[1].label = 'x = ' + parseFloat(tabla[x][1]).toFixed(5);
@@ -462,17 +457,9 @@ anim.addEventListener('click', function() {
                 {x:parseFloat(tabla[x][2]), y : 0}
             ]
 
-            //lINEA DE X A la recta tangente
-            myChart.options.plugins.annotation.annotations['rline'].xMin =parseFloat(tabla[x][1])
-            myChart.options.plugins.annotation.annotations['rline'].xMax =parseFloat(tabla[x][1])
-            if (parseFloat(tabla[x][3])<0){
-                myChart.options.plugins.annotation.annotations['rline'].yMax = 0;
-                myChart.options.plugins.annotation.annotations['rline'].yMin =parseFloat(tabla[x][3]);    
-            }else{
-                myChart.options.plugins.annotation.annotations['rline'].yMin = 0;
-                myChart.options.plugins.annotation.annotations['rline'].yMax =parseFloat(tabla[x][3]);
-                
-            }
+            //lINEA DE X A la recta tangente  vertical rline
+            graphVerticalLine('rline', 0 ,parseFloat(tabla[x][3]),parseFloat(tabla[x][1]))
+
             myChart.update();
 
             x += 1; 
@@ -481,6 +468,86 @@ anim.addEventListener('click', function() {
         }
 
         animateChart(); // Start animation
+    }
+
+    if (method === 'btnBS'){
+        const {raiz, tabla } = MT.bisection(func, parseFloat(intp0.value), parseFloat(intp1.value), parseFloat(inptol.value), parseInt(intmop.value))
+        tabla.unshift(['i', 'a', 'b', 'c', 'f(x)', 'intervalo']);
+        tablaG=tabla;
+
+        generarTabla(tabla)
+        slider.max = tabla.length-1;
+        let x=1;
+
+        //Tomar los valores maximos en la grafica para sacar un porciento para las lineas rectas
+        let diferencia =  myChart.options.scales.y.max - myChart.options.scales.y.min;
+        //obtenemos los valores para el 2.5%
+        lineheight = diferencia*0.025
+
+        //Agregar el punto que ira animando atravez del tiempo
+        myChart.data.datasets.push({
+            label: 'c = ' + parseFloat(tabla[1][3]),
+            data: [], // Y values
+            borderColor: 'red',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 2
+        });
+        //Agregar linea vertical a
+        myChart.data.datasets.push({
+            label: 'a = ' + parseFloat(tabla[1][1]),
+            data: [], // Y values
+            borderColor: 'rgb(60, 255, 0)',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0
+        });
+        //Agregar linea vertical b
+        myChart.data.datasets.push({
+            label: 'b = ' + parseFloat(tabla[1][2]),
+            data: [], // Y values
+            borderColor: 'rgb(153, 0, 255)',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 0
+        });
+
+        function animateChart() {
+            if (x > tabla.length-1) return;
+            //Actualiza slider
+            slider.value = parseInt(tabla[x][0])
+            sliderValue.textContent = slider.value;
+            //Actualizar labels
+            actlblRaiz(tabla[x][5], tabla[x][3], tabla.length-1, x)
+            lblerr.textContent = 'Error absoluto: ' + tabla[x][5];
+            //Actualizar el punto c
+            myChart.data.datasets[1].label = 'c = ' + parseFloat( tabla[x][3]).toFixed(5);
+            myChart.data.datasets[1].data =  [{x:parseFloat(tabla[x][3]), y : 0}];
+            //Actualizar linea a
+            myChart.data.datasets[2].label = 'a = ' + parseFloat( tabla[x][1]).toFixed(5);
+            myChart.data.datasets[2].data =  [
+                {x:parseFloat(tabla[x][1]), y : lineheight},
+                {x:parseFloat(tabla[x][1]), y : -lineheight},
+        
+            ];
+
+            //actualizar linea b
+            myChart.data.datasets[3].label = 'b = ' + parseFloat( tabla[x][1]).toFixed(5);
+            myChart.data.datasets[3].data =  [
+                {x:parseFloat(tabla[x][2]), y : lineheight},
+                {x:parseFloat(tabla[x][2]), y : -lineheight},
+        
+            ];
+            myChart.update();
+
+            x += 1; 
+
+            setTimeout(animateChart, delay); // Add delay
+
+        }
+        animateChart()
+
+
     }
     
     
@@ -495,7 +562,7 @@ slider.addEventListener("input", function() {
             console.log('entroooooo')
             const x = slider.value;
             //Actualizar labels
-            lblraiz.textContent = 'Raiz: ' + tablaG[x][1];
+            actlblRaiz(tablaG[x][4], tablaG[x][1], tablaG.length-1, x)
             lblerr.textContent = 'Error absoluto: ' + tablaG[x][4];
             //Actualizar la posicion del punto
             myChart.data.datasets[1].label = 'x = ' + parseFloat(tablaG[x][1]).toFixed(5);
@@ -508,17 +575,69 @@ slider.addEventListener("input", function() {
             ]
 
             //lINEA DE X A la recta tangente
-            myChart.options.plugins.annotation.annotations['rline'].xMin =parseFloat(tablaG[x][1])
-            myChart.options.plugins.annotation.annotations['rline'].xMax =parseFloat(tablaG[x][1])
-            if (parseFloat(tablaG[x][3])<0){
-                myChart.options.plugins.annotation.annotations['rline'].yMax = 0;
-                myChart.options.plugins.annotation.annotations['rline'].yMin =parseFloat(tablaG[x][3]);    
-            }else{
-                myChart.options.plugins.annotation.annotations['rline'].yMin = 0;
-                myChart.options.plugins.annotation.annotations['rline'].yMax =parseFloat(tablaG[x][3]);
-                
-            }
+           //lINEA DE X A la recta tangente  vertical rline
+            graphVerticalLine('rline', 0 ,parseFloat(tablaG[x][3]),parseFloat(tablaG[x][1]));
             myChart.update();
+            
+        }
+
+        if(method === 'btnPF'){
+            const x = slider.value;
+         
+            //Actualizar labels
+           
+            actlblRaiz(tablaG[x][4], tablaG[x][1], tablaG.length-1, x)
+            lblerr.textContent = 'Error absoluto: ' + tablaG[x][4];
+            
+            //Actualizar la posicion del punto
+            myChart.data.datasets[1].label = 'x = ' + parseFloat(tablaG[x][1]).toFixed(5);
+            myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][1]), y : 0}];
+            myChart.data.datasets[2].label = 'xn = ' + parseFloat(tablaG[x][2]).toFixed(5);
+            myChart.data.datasets[2].data =  [{x:parseFloat(tablaG[x][2]), y : 0}];
+            myChart.data.datasets[3].label= 'g(x) =' + parseFloat(tablaG[x][3]).toFixed(5)
+            myChart.data.datasets[3].data=[{x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][3])},]
+
+            //Linea de p a g(x) vertical rline
+            graphVerticalLine('rline',0, parseFloat(tablaG[x][3]), parseFloat(tablaG[x][1]) );
+
+            //Linea de g(x) a identidad horizontal gline
+            graphHorizontalLine('gline', parseFloat(tablaG[x][1]), parseFloat(tablaG[x][2]), parseFloat(tablaG[x][2]));
+           
+            
+            //Linea de identidad a p1 vertical tline
+            graphVerticalLine('tline',0, parseFloat(tablaG[x][3]), parseFloat(tablaG[x][2]) );
+
+        
+            myChart.update();
+
+
+        }
+
+        if(method === 'btnBS'){
+            const x = slider.value;
+            //Actualizar labels
+            actlblRaiz(tablaG[x][5], tablaG[x][3], tablaG.length-1, x)
+            lblerr.textContent = 'Error absoluto: ' + tablaG[x][5];
+            //Actualizar el punto c
+            myChart.data.datasets[1].label = 'c = ' + parseFloat( tablaG[x][3]).toFixed(5);
+            myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][3]), y : 0}];
+            //Actualizar linea a
+            myChart.data.datasets[2].label = 'a = ' + parseFloat( tablaG[x][1]).toFixed(5);
+            myChart.data.datasets[2].data =  [
+                {x:parseFloat(tablaG[x][1]), y : lineheight},
+                {x:parseFloat(tablaG[x][1]), y : -lineheight},
+        
+            ];
+
+            //actualizar linea b
+            myChart.data.datasets[3].label = 'b = ' + parseFloat( tablaG[x][1]).toFixed(5);
+            myChart.data.datasets[3].data =  [
+                {x:parseFloat(tablaG[x][2]), y : lineheight},
+                {x:parseFloat(tablaG[x][2]), y : -lineheight},
+        
+            ];
+            myChart.update();
+
         }
     }
 });
