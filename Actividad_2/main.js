@@ -25,6 +25,7 @@ const defaultFN = {
 };
 
 //configuracion de la grafica
+//rline, gline, tline son lineas de apoyo para las animaciones
 const config = {
     type: 'line',
     data: {},
@@ -94,6 +95,36 @@ const config = {
                         position: 'top'
                         }
                     },
+                    gline: { //linea de apoyo
+                        type: 'line',
+                        xMin: -100000, // Posición de la línea vertical
+                        xMax: -100000,
+                        yMin: NaN,
+                        yMax: NaN,
+                        borderColor: 'rgb(162, 0, 255)', // Color de la línea
+                        borderWidth: 1, // Grosor de la línea
+                        borderDash: [5, 5], // Línea punteada (opcional)
+                        label: {
+                        content: 'x = 2',
+                        enabled: true,
+                        position: 'top'
+                        }
+                    },
+                    tline: { //linea de apoyo
+                        type: 'line',
+                        xMin: -100000, // Posición de la línea vertical
+                        xMax: -100000,
+                        yMin: NaN,
+                        yMax: NaN,
+                        borderColor: 'rgb(162, 0, 255)', // Color de la línea
+                        borderWidth: 1, // Grosor de la línea
+                        borderDash: [5, 5], // Línea punteada (opcional)
+                        label: {
+                        content: 'x = 2',
+                        enabled: true,
+                        position: 'top'
+                        }
+                    },
                 }
             },
             zoom: {
@@ -103,6 +134,48 @@ const config = {
         }
     },
 };
+
+//Reset grafics
+function resetF(){
+    myChart.data.datasets = []
+    myChart.options.plugins.annotation.annotations['rline'].xMin = -100000;
+    myChart.options.plugins.annotation.annotations['rline'].xMax = -100000;
+    myChart.options.plugins.annotation.annotations['rline'].yMin = NaN;
+    myChart.options.plugins.annotation.annotations['rline'].yMax = NaN;
+    myChart.options.plugins.annotation.annotations['gline'].xMin = -100000;
+    myChart.options.plugins.annotation.annotations['gline'].xMax = -100000;
+    myChart.options.plugins.annotation.annotations['gline'].yMin = NaN;
+    myChart.options.plugins.annotation.annotations['gline'].yMax = NaN;
+    myChart.options.plugins.annotation.annotations['tline'].xMin = -100000;
+    myChart.options.plugins.annotation.annotations['tline'].xMax = -100000;
+    myChart.options.plugins.annotation.annotations['tline'].yMin = NaN;
+    myChart.options.plugins.annotation.annotations['tline'].yMax = NaN;
+}
+
+function graphHorizontalLine(line, x, x1, y){
+    myChart.options.plugins.annotation.annotations[line].yMin =y;
+    myChart.options.plugins.annotation.annotations[line].yMax =y;
+    if(x<x1){
+        myChart.options.plugins.annotation.annotations[line].xMin =x;
+        myChart.options.plugins.annotation.annotations[line].xMax =x1; 
+    }else{
+        myChart.options.plugins.annotation.annotations[line].xMin =x1;
+        myChart.options.plugins.annotation.annotations[line].xMax =x; 
+    }
+}
+
+function graphVerticalLine(line, y, y1, x){
+    myChart.options.plugins.annotation.annotations[line].xMin =x;
+    myChart.options.plugins.annotation.annotations[line].xMax =x;
+    if(y<y1){
+        myChart.options.plugins.annotation.annotations[line].yMin =y;
+        myChart.options.plugins.annotation.annotations[line].yMax =y1; 
+    }else{
+        myChart.options.plugins.annotation.annotations[line].yMin =y1;
+        myChart.options.plugins.annotation.annotations[line].yMax =y; 
+    }
+      
+}
 
 const myChart = new Chart(ctx, config);
 
@@ -205,27 +278,49 @@ function generarTabla(arreglo) {
 }
 
 btngraf.addEventListener('click',function() {
-    //Limpiar los datos anteriores
-    myChart.data.datasets = []
-    myChart.options.plugins.annotation.annotations['rline'].xMin = -100000;
-    myChart.options.plugins.annotation.annotations['rline'].xMax = -100000;
-    myChart.options.plugins.annotation.annotations['rline'].yMin = NaN;
-    myChart.options.plugins.annotation.annotations['rline'].yMax = NaN;
+    //LIMPIAR GRAFICA
+    resetF();
     graficar(func);
 });
 
 anim.addEventListener('click', function() {
     const delay = 1000;   // Slower animation (increase for slower effect)
-    //Limpiar todo lo anterior
-    myChart.data.datasets = []
-    myChart.options.plugins.annotation.annotations['rline'].xMin = -100000;
-    myChart.options.plugins.annotation.annotations['rline'].xMax = -100000;
-    myChart.options.plugins.annotation.annotations['rline'].yMin = NaN;
-    myChart.options.plugins.annotation.annotations['rline'].yMax = NaN;
+    resetF();
     graficar(func);
     if (method === 'btnPF'){
-        
+        const {raiz, tabla } = MT.fixed_point(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
+        tabla.unshift(['i', 'p', 'p1', 'g(x)', 'f(x)', 'Ea']);
+        tablaG=tabla;
 
+        generarTabla(tabla)
+        //Agregar el punto que ira animando atravez del tiempo
+        myChart.data.datasets.push({
+            label: 'x' + parseFloat(tabla[1][1]),
+            data: [{x:parseFloat(tabla[1][1]), y : 0}], // Y values
+            borderColor: 'red',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 2
+        });
+        //Graficar xn
+        myChart.data.datasets.push({
+            label: 'xn',
+            data: [], // Y values
+            borderColor: 'rgb(0, 255, 255)',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 2
+        });
+        
+        //Graficar xn
+        myChart.data.datasets.push({
+            label: 'g(x)',
+            data: [], // Y values
+            borderColor: 'rgb(234, 0, 255)',
+            borderWidth: 2,
+            fill: false,
+            pointRadius: 2
+        });
         //Grafiacar la funcion identidad
         const d = FN.identidad(parseFloat(inpa.value), parseFloat(inpb.value), 20)
         myChart.data.datasets.push({
@@ -238,10 +333,8 @@ anim.addEventListener('click', function() {
             pointRadius: 0
         });
 
-        console.log("se vieneee")
+        //Graficar la funcion despejada x=g(x)
         const g = FN.apf(parseFloat(inpa.value), parseFloat(inpb.value), 100);
-        
-
         myChart.data.datasets.push({
             label: 'g(x)',
             data:g,  // Y values
@@ -250,19 +343,62 @@ anim.addEventListener('click', function() {
             fill: false,
             pointRadius: 0
         });
+    
+        myChart.update();
+        let x=1;
+        function animateChart() {
+            if (x > tabla.length-1) return; // Stop animation
+            slider.value = parseInt(tabla[x][0])
+            sliderValue.textContent = slider.value;
+            //Actualizar labels
+            lblraiz.textContent = 'Raiz: ' + tabla[x][1];
+            lblerr.textContent = 'Error absoluto: ' + tabla[x][4];
+            
+            //Actualizar la posicion del punto
+            myChart.data.datasets[1].label = 'x = ' + parseFloat(tabla[x][1]).toFixed(5);
+            myChart.data.datasets[1].data =  [{x:parseFloat(tabla[x][1]), y : 0}];
+            myChart.data.datasets[2].label = 'xn = ' + parseFloat(tabla[x][2]).toFixed(5);
+            myChart.data.datasets[2].data =  [{x:parseFloat(tabla[x][2]), y : 0}];
+            myChart.data.datasets[3].label= 'g(x) =' + parseFloat(tabla[x][3]).toFixed(5)
+            myChart.data.datasets[3].data=[{x:parseFloat(tabla[x][1]), y : parseFloat(tabla[x][3])},]
 
-        //Graficar la funcion despejada x=g(x)
+            //Linea de p a g(x) vertical rline
+            graphVerticalLine('rline',0, parseFloat(tabla[x][3]), parseFloat(tabla[x][1]) );
 
-        myChart.update()
-        const {raiz, tabla } = MT.fixed_point(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
-        generarTabla(tabla)
+            //Linea de g(x) a identidad horizontal gline
+            graphHorizontalLine('gline', parseFloat(tabla[x][1]), parseFloat(tabla[x][2]), parseFloat(tabla[x][2]));
+           
+            
+            //Linea de identidad a p1 vertical tline
+            graphVerticalLine('tline',0, parseFloat(tabla[x][3]), parseFloat(tabla[x][2]) );
+
+            
+
+            /*lINEA DE X A la recta tangente
+            myChart.options.plugins.annotation.annotations['rline'].xMin =parseFloat(tabla[x][1])
+            myChart.options.plugins.annotation.annotations['rline'].xMax =parseFloat(tabla[x][1])
+            if (parseFloat(tabla[x][3])<0){
+                myChart.options.plugins.annotation.annotations['rline'].yMax = 0;
+                myChart.options.plugins.annotation.annotations['rline'].yMin =parseFloat(tabla[x][3]);    
+            }else{
+                myChart.options.plugins.annotation.annotations['rline'].yMin = 0;
+                myChart.options.plugins.annotation.annotations['rline'].yMax =parseFloat(tabla[x][3]);
+                
+            }*/
+            myChart.update();
+
+            x += 1; 
+
+            setTimeout(animateChart, delay); // Add delay
+        }
+        animateChart();
     }
 
     if (method === 'btnNR'){
         const {raiz, tabla } = MT.newton_r(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
         console.log(raiz)
-        tablaG =tabla;
         tabla.unshift(['i', 'x', 'xn', 'f(x)', 'Ea'])
+        tablaG =tabla;
         console.log(tabla)
         lblraiz.textContent = 'Raiz: ' + tabla[1][1];
         lblerr.textContent = 'Error absoluto:: ' + tabla[1][4];

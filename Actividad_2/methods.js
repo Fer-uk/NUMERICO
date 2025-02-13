@@ -44,8 +44,8 @@ export function fixed_point(opcion, p, tol, i) {
     while (iteraciones < i) {
         p1 = gx(p);
 
-        // Guardar la quintupla (iteración, p, p1, f(p), error)
-        tabla.push([iteraciones + 1, p, p1, func(p1), Math.abs((p1 - p))]);
+        // Guardar la quintupla (iteración, p, p1, ,g(p), f(p), error)
+        tabla.push([iteraciones + 1, p, p1, gx(p), func(p1), Math.abs((p1 - p))]);
 
         if (p1 === 0 || Math.abs((p1 - p))  < tol) break; // Convergencia
 
