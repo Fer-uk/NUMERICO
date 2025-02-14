@@ -30,7 +30,7 @@ const funcionesDerivadas = {
     a: x => 3 * Math.pow(x,2) + 8 * x,  // 3x2 + 8x
     b: x => 3 * Math.pow(x,2) - 4 * x,  // 3x2 - 4x 
     c: x => 3 * Math.pow(x,2) + 6 * x,  // 3x^2 + 6x 
-    d: x =>  Math.sin(x),  //   sen(x)
+    d: x =>  1+Math.sin(x),  //   sen(x)
     e: x => Math.exp(x) - Math.log(2) * Math.pow(2, -x) + 2 * Math.cos(x) - 6  // e^x - ln(2) * 2^(-x) - 2cos(x)
 }
 

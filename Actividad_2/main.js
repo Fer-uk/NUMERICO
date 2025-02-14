@@ -667,7 +667,7 @@ function actualizarBS(x){
     ];
 
     //actualizar linea b
-    myChart.data.datasets[3].label = 'b = ' + parseFloat( tablaG[x][1]).toFixed(5);
+    myChart.data.datasets[3].label = 'b = ' + parseFloat( tablaG[x][2]).toFixed(5);
     myChart.data.datasets[3].data =  [
         {x:parseFloat(tablaG[x][2]), y : lineheight},
         {x:parseFloat(tablaG[x][2]), y : -lineheight},
