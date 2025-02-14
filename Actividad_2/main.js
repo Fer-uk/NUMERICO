@@ -744,21 +744,22 @@ function actualizarRF(x){
     lblerr.textContent = 'Error absoluto raices: ' + tablaG[x][7];
     //Actualizar el punto c
     myChart.data.datasets[1].label = 'c = ' + parseFloat( tablaG[x][3]).toFixed(5);
-    myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][3]), y : 0}];
+    myChart.data.datasets[1].data = [{x: parseFloat(tablaG[x][3]), y: 0}];
 
     //Actualizar el punto f(a)
     myChart.data.datasets[2].label = '(a): (' + parseFloat( tablaG[x][1]).toFixed(5) + ' , '+ parseFloat( tablaG[x][4]).toFixed(5) + ')';
-    myChart.data.datasets[2].data =  [{x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][4])}];
+    myChart.data.datasets[2].data = [{x: parseFloat(tablaG[x][1]), y: parseFloat(tablaG[x][4])}];
+
 
     //Actualizar el punto f(b)
     myChart.data.datasets[3].label = '(b): (' + parseFloat( tablaG[x][2]).toFixed(5) + ' , '+ parseFloat( tablaG[x][5]).toFixed(5) + ')';
-    myChart.data.datasets[3].data =  [{x:parseFloat(tablaG[x][2]), y : parseFloat(tablaG[x][5])}];
+    myChart.data.datasets[3].data = [{x:parseFloat(tablaG[x][2]), y : parseFloat(tablaG[x][5])}];
 
 
-    myChart.data.datasets[4].data =  [
+    myChart.data.datasets[4].data.push(
         {x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][4])},
         {x:parseFloat(tablaG[x][2]), y : parseFloat(tablaG[x][5])}
-    ];
+    );
 
     //linea vertical de a a b pasando por c
     graphVerticalLine('rline', parseFloat(tablaG[x][4]), parseFloat(tablaG[x][5]), parseFloat(tablaG[x][3]))
@@ -791,10 +792,10 @@ function actualizarRFM(x){
     myChart.data.datasets[3].data =  [{x:parseFloat(tablaG[x][2]), y : parseFloat(tablaG[x][5])}];
 
 
-    myChart.data.datasets[4].data =  [
+    myChart.data.datasets[4].data.push(  
         {x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][4])},
         {x:parseFloat(tablaG[x][2]), y : parseFloat(tablaG[x][5])}
-    ];
+    );
 
     //linea vertical de a a b pasando por c
     graphVerticalLine('rline', parseFloat(tablaG[x][4]), parseFloat(tablaG[x][5]), parseFloat(tablaG[x][3]))
