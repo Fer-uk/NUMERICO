@@ -167,3 +167,84 @@ export function newton_r(opcion, x, tol, i){
     return { raiz: xn, tabla };
 
 }
+
+
+export function secante(opcion, x0, x1, tol, i) {
+    const func = funciones[opcion];
+    if (!func) {
+        console.error("Opción de función no válida.");
+        return null;
+    }
+
+    let iteraciones = 0;
+    let x2;
+    let tabla = [];
+
+    while (iteraciones < i) {
+        let fx0 = func(x0);
+        let fx1 = func(x1);
+        
+        if (fx1 - fx0 === 0) {
+            console.error("División por cero en el método de la secante");
+            return null;
+        }
+
+        x2 = x1 - (fx1 * (x1 - x0)) / (fx1 - fx0);
+        
+        tabla.push([iteraciones + 1, x0, x1, x2, func(x2)]);
+
+        if (Math.abs(x2 - x1) < tol) break;
+
+        x0 = x1;
+        x1 = x2;
+        iteraciones++;
+    }
+
+    return { raiz: x2, tabla };
+}
+
+export function regula_falsi_modificada(opcion, a, b, tol, i) {
+    const func = funciones[opcion];
+
+    if (!func) {
+        console.error("Opción de función no válida.");
+        return null;
+    }
+
+    if (func(a) * func(b) > 0) {
+        console.error("f(a) y f(b) no tienen signos distintos");
+        return null;
+    }
+
+    let iteraciones = 0;
+    let c, fc;
+    let ant = null;
+    let tabla = [];
+
+    let fa = func(a), fb = func(b);
+
+    while (iteraciones < i) {
+        c = (b * fa - a * fb) / (fa - fb);
+        fc = func(c);
+
+        let error = ant !== null ? Math.abs((c - ant) / c) : null;
+        ant = c;
+
+        tabla.push([iteraciones + 1, a, b, c, fa, fb, fc, error]);
+
+        if (Math.abs(fc) < tol || (error !== null && error < tol)) break;
+
+        // Regla falsa modificada: si el mismo extremo se mantiene, su f(x) se divide por 2
+        if (fa * fc > 0) {
+            a = c;
+            fa = func(a) / 2; // Ajuste
+        } else {
+            b = c;
+            fb = func(b) / 2; // Ajuste
+        }
+
+        iteraciones++;
+    }
+
+    return { raiz: c, tabla };
+}

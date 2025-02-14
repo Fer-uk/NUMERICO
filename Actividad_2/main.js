@@ -444,9 +444,48 @@ function setUpBS(){
 
     myChart.update();
 }
+function setUpSC() {
+    const { raiz, tabla } = MT.secante(func, parseFloat(intp0.value), parseFloat(intp1.value), parseFloat(inptol.value), parseInt(intmop.value));
+    tabla.unshift(['i', 'p', 'pi+1', 'f(pi+1)', 'f(p)', 'Ea']);
+    tablaG = tabla;
 
-function setUpSC(){
+    console.log(tabla);
+    lblraiz.textContent = 'Raiz: ' + tabla[1][1];
+    lblerr.textContent = 'Error absoluto: ' + tabla[1][5];
+    generarTabla(tabla);
 
+    // Agregar el punto que irá animando a través del tiempo
+    myChart.data.datasets.push({
+        label: 'p' + parseFloat(tabla[1][1]),
+        data: [{ x: parseFloat(tabla[1][1]), y: 0 }], // Y values
+        borderColor: 'red',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 2
+    });
+
+    // Graficar pi+1
+    myChart.data.datasets.push({
+        label: 'pi+1',
+        data: [], // Y values
+        borderColor: 'rgb(0, 255, 255)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 2
+    });
+
+    // Agregar la recta secante que se mostrará a través del tiempo
+    myChart.data.datasets.push({
+        label: 'secante',
+        data: [], // Y values
+        borderColor: 'rgba(30, 255, 0, 0.73)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 0
+    });
+
+    slider.max = tabla.length - 1;
+    myChart.update();
 }
 
 function setUpRF(){
@@ -500,9 +539,57 @@ function setUpRF(){
     myChart.update();
 }
 
-function setUpRFM(){
+function setUpRFM() {
+    const { raiz, tabla } = MT.regula_falsi_modificada(func, parseFloat(intp0.value), parseFloat(intp1.value), parseFloat(inptol.value), parseInt(intmop.value));
+    tabla.unshift(['i', 'a', 'b', 'xr', 'f(a)', 'f(b)', 'f(xr)', 'Error absoluto raíces']);
+    tablaG = tabla;
 
+    generarTabla(tabla);
+    slider.max = tabla.length - 1;
+
+    // Agregar el punto que irá animando a través del tiempo
+    myChart.data.datasets.push({
+        label: 'xr = ' + parseFloat(tabla[1][3]),
+        data: [], // Y values
+        borderColor: 'red',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 2
+    });
+
+    // Agregar el punto f(a)
+    myChart.data.datasets.push({
+        label: 'f(a) = ' + parseFloat(tabla[1][4]),
+        data: [], // Y values
+        borderColor: 'rgb(43, 255, 0)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 2
+    });
+
+    // Agregar el punto f(b)
+    myChart.data.datasets.push({
+        label: 'f(b) = ' + parseFloat(tabla[1][5]),
+        data: [], // Y values
+        borderColor: 'rgb(255, 0, 98)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 2
+    });
+
+    // Agregar la recta de a a b
+    myChart.data.datasets.push({
+        label: 'Recta ab',
+        data: [], // Y values
+        borderColor: 'rgb(217, 255, 0)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 0
+    });
+
+    myChart.update();
 }
+
 
 //Funciones para actualizar la animacion
 function actualizarNR(x){
