@@ -168,7 +168,6 @@ export function newton_r(opcion, x, tol, i){
 
 }
 
-
 export function secante(opcion, x0, x1, tol, i) {
     const func = funciones[opcion];
     if (!func) {
@@ -190,10 +189,12 @@ export function secante(opcion, x0, x1, tol, i) {
         }
 
         x2 = x1 - (fx1 * (x1 - x0)) / (fx1 - fx0);
-        
-        tabla.push([iteraciones + 1, x0, x1, x2, func(x2)]);
+        let error = Math.abs(x2 - x1);
 
-        if (Math.abs(x2 - x1) < tol) break;
+        // Guardar los mismos datos que Newton-Raphson
+        tabla.push([iteraciones + 1, x1, x2, func(x2), func(x1), error]);
+
+        if (error < tol) break;
 
         x0 = x1;
         x1 = x2;
@@ -202,6 +203,7 @@ export function secante(opcion, x0, x1, tol, i) {
 
     return { raiz: x2, tabla };
 }
+
 
 export function regula_falsi_modificada(opcion, a, b, tol, i) {
     const func = funciones[opcion];
@@ -224,6 +226,8 @@ export function regula_falsi_modificada(opcion, a, b, tol, i) {
     let fa = func(a), fb = func(b);
 
     while (iteraciones < i) {
+        fa = func(a);
+        fb = func(b);
         c = (b * fa - a * fb) / (fa - fb);
         fc = func(c);
 

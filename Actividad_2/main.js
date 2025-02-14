@@ -302,7 +302,8 @@ function setUpNR(){
     const {raiz, tabla } = MT.newton_r(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
         tabla.unshift(['i', 'p', 'pi+1', 'f(pi+1)', 'f(p)', 'Ea'])
         tablaG =tabla;
-        console.log(tabla)
+
+        console.log(tabla);
         lblraiz.textContent = 'Raiz: ' + tabla[1][1];
         lblerr.textContent = 'Error absoluto:: ' + tabla[1][5];
         generarTabla(tabla)
@@ -444,6 +445,7 @@ function setUpBS(){
 
     myChart.update();
 }
+
 function setUpSC() {
     const { raiz, tabla } = MT.secante(func, parseFloat(intp0.value), parseFloat(intp1.value), parseFloat(inptol.value), parseInt(intmop.value));
     tabla.unshift(['i', 'p', 'pi+1', 'f(pi+1)', 'f(p)', 'Ea']);
@@ -454,30 +456,30 @@ function setUpSC() {
     lblerr.textContent = 'Error absoluto: ' + tabla[1][5];
     generarTabla(tabla);
 
-    // Agregar el punto que irá animando a través del tiempo
+    // Agregar el punto f(p)
     myChart.data.datasets.push({
-        label: 'p' + parseFloat(tabla[1][1]),
-        data: [{ x: parseFloat(tabla[1][1]), y: 0 }], // Y values
+        label: 'f(p) = ' + parseFloat(tabla[1][4]),
+        data: [{ x: parseFloat(tabla[1][1]), y: parseFloat(tabla[1][4]) }], 
         borderColor: 'red',
         borderWidth: 2,
         fill: false,
         pointRadius: 2
     });
 
-    // Graficar pi+1
+    // Agregar el punto f(pi+1)
     myChart.data.datasets.push({
-        label: 'pi+1',
-        data: [], // Y values
+        label: 'f(pi+1) = ' + parseFloat(tabla[1][3]),
+        data: [{ x: parseFloat(tabla[1][2]), y: parseFloat(tabla[1][3]) }],
         borderColor: 'rgb(0, 255, 255)',
         borderWidth: 2,
         fill: false,
         pointRadius: 2
     });
 
-    // Agregar la recta secante que se mostrará a través del tiempo
+    // Agregar la recta secante que conecta f(p) y f(pi+1)
     myChart.data.datasets.push({
-        label: 'secante',
-        data: [], // Y values
+        label: 'Secante f(p)-f(pi+1)',
+        data: [],
         borderColor: 'rgba(30, 255, 0, 0.73)',
         borderWidth: 2,
         fill: false,
@@ -487,6 +489,8 @@ function setUpSC() {
     slider.max = tabla.length - 1;
     myChart.update();
 }
+
+
 
 function setUpRF(){
     const {raiz, tabla } = MT.false_position(func, parseFloat(intp0.value), parseFloat(intp1.value), parseFloat(inptol.value), parseInt(intmop.value))
@@ -541,15 +545,15 @@ function setUpRF(){
 
 function setUpRFM() {
     const { raiz, tabla } = MT.regula_falsi_modificada(func, parseFloat(intp0.value), parseFloat(intp1.value), parseFloat(inptol.value), parseInt(intmop.value));
-    tabla.unshift(['i', 'a', 'b', 'xr', 'f(a)', 'f(b)', 'f(xr)', 'Error absoluto raíces']);
-    tablaG = tabla;
+    tabla.unshift(['i', 'a', 'b', 'c','f(a)', 'f(b)', 'f(x)', 'Error absoluto raices']);
+    tablaG=tabla;
 
-    generarTabla(tabla);
-    slider.max = tabla.length - 1;
+    generarTabla(tabla)
+    slider.max = tabla.length-1;
 
-    // Agregar el punto que irá animando a través del tiempo
-    myChart.data.datasets.push({
-        label: 'xr = ' + parseFloat(tabla[1][3]),
+     //Agregar el punto que ira animando atravez del tiempo
+     myChart.data.datasets.push({
+        label: 'c = ' + parseFloat(tabla[1][3]),
         data: [], // Y values
         borderColor: 'red',
         borderWidth: 2,
@@ -557,9 +561,9 @@ function setUpRFM() {
         pointRadius: 2
     });
 
-    // Agregar el punto f(a)
+     //Agregar el punto f(a)
     myChart.data.datasets.push({
-        label: 'f(a) = ' + parseFloat(tabla[1][4]),
+        label: 'f(a) = ' + parseFloat(tabla[1][3]),
         data: [], // Y values
         borderColor: 'rgb(43, 255, 0)',
         borderWidth: 2,
@@ -567,9 +571,9 @@ function setUpRFM() {
         pointRadius: 2
     });
 
-    // Agregar el punto f(b)
+    //Agregar el punto f(b)
     myChart.data.datasets.push({
-        label: 'f(b) = ' + parseFloat(tabla[1][5]),
+        label: 'f(b) = ' + parseFloat(tabla[1][3]),
         data: [], // Y values
         borderColor: 'rgb(255, 0, 98)',
         borderWidth: 2,
@@ -577,8 +581,8 @@ function setUpRFM() {
         pointRadius: 2
     });
 
-    // Agregar la recta de a a b
-    myChart.data.datasets.push({
+     //Recta de a a b
+     myChart.data.datasets.push({
         label: 'Recta ab',
         data: [], // Y values
         borderColor: 'rgb(217, 255, 0)',
@@ -586,7 +590,7 @@ function setUpRFM() {
         fill: false,
         pointRadius: 0
     });
-
+    
     myChart.update();
 }
 
@@ -671,9 +675,65 @@ function actualizarBS(x){
     ];
     myChart.update();
 }
+function calcularSecanteExtendidaYInterseccion(x0, y0, x1, y1, extension = 2) {
+    // Cálculo de pendiente
+    const pendiente = (y1 - y0) / (x1 - x0);
+    
+    // Extender la recta secante en ambas direcciones
+    const xInicio = x0 - extension * (x1 - x0);
+    const yInicio = y0 - extension * (y1 - y0);
+    const xFin = x1 + extension * (x1 - x0);
+    const yFin = y1 + extension * (y1 - y0);
 
-function actualizarSC(x){
+    // Calcular intersección con el eje X (f(x) = 0)
+    const xInterseccion = x0 - y0 / pendiente; // Despejando de la ecuación de la recta
 
+    return {
+        secanteExtendida: [{ x: xInicio, y: yInicio }, { x: xFin, y: yFin }],
+        interseccionX: { x: xInterseccion, y: 0 }
+    };
+}
+
+function actualizarSC(x) {
+    slider.value = parseInt(tablaG[x][0]);
+    sliderValue.textContent = slider.value;
+
+    // Actualizar labels
+    actlblRaiz(tablaG[x][5], tablaG[x][1], tablaG.length - 1, x);
+    lblerr.textContent = 'Error absoluto: ' + tablaG[x][5];
+
+    // Obtener valores de la tabla
+    const x0 = parseFloat(tablaG[x][1]);
+    const y0 = parseFloat(tablaG[x][4]);
+    const x1 = parseFloat(tablaG[x][2]);
+    const y1 = parseFloat(tablaG[x][3]);
+
+    // Calcular la secante extendida y la intersección con el eje X
+    const { secanteExtendida, interseccionX } = calcularSecanteExtendidaYInterseccion(x0, y0, x1, y1);
+
+    // Actualizar el punto p en la gráfica
+    myChart.data.datasets[1].label = 'p = ' + x0.toFixed(5);
+    myChart.data.datasets[1].data = [{ x: x0, y: y0 }];
+
+    // Actualizar el punto p+1 en la gráfica
+    myChart.data.datasets[2].label = 'p+1 = ' + x1.toFixed(5);
+    myChart.data.datasets[2].data = [{ x: x1, y: y1 }];
+
+    // Actualizar la línea de la secante extendida
+    myChart.data.datasets[3].label = 'Secante';
+    myChart.data.datasets[3].data = secanteExtendida;
+
+    // Agregar la intersección con el eje X
+    myChart.data.datasets[4] = {
+        label: 'Intersección con X',
+        data: [interseccionX],
+        borderColor: 'blue',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 4
+    };
+
+    myChart.update();
 }
 
 function actualizarRF(x){
@@ -713,7 +773,40 @@ function actualizarRF(x){
 }
 
 function actualizarRFM(x){
+    slider.value = parseInt(tablaG[x][0])
+    sliderValue.textContent = slider.value;
+    //Actualizar labels
+    actlblRaiz(tablaG[x][7], tablaG[x][3], tablaG.length-1, x)
+    lblerr.textContent = 'Error absoluto raices: ' + tablaG[x][7];
+    //Actualizar el punto c
+    myChart.data.datasets[1].label = 'c = ' + parseFloat( tablaG[x][3]).toFixed(5);
+    myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][3]), y : 0}];
 
+    //Actualizar el punto f(a)
+    myChart.data.datasets[2].label = '(a): (' + parseFloat( tablaG[x][1]).toFixed(5) + ' , '+ parseFloat( tablaG[x][4]).toFixed(5) + ')';
+    myChart.data.datasets[2].data =  [{x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][4])}];
+
+    //Actualizar el punto f(b)
+    myChart.data.datasets[3].label = '(b): (' + parseFloat( tablaG[x][2]).toFixed(5) + ' , '+ parseFloat( tablaG[x][5]).toFixed(5) + ')';
+    myChart.data.datasets[3].data =  [{x:parseFloat(tablaG[x][2]), y : parseFloat(tablaG[x][5])}];
+
+
+    myChart.data.datasets[4].data =  [
+        {x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][4])},
+        {x:parseFloat(tablaG[x][2]), y : parseFloat(tablaG[x][5])}
+    ];
+
+    //linea vertical de a a b pasando por c
+    graphVerticalLine('rline', parseFloat(tablaG[x][4]), parseFloat(tablaG[x][5]), parseFloat(tablaG[x][3]))
+    
+    //linea vertical del 0 al punto f(a)
+    graphVerticalLine('gline', parseFloat(tablaG[x][4]), 0, parseFloat(tablaG[x][1]))
+
+    //linea vertcal del 0 al punto f(b)
+    graphVerticalLine('tline', 0, parseFloat(tablaG[x][5]), parseFloat(tablaG[x][2]))
+    myChart.update();
+    
+    
 }
 
 
