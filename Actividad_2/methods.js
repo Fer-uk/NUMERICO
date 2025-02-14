@@ -118,14 +118,15 @@ export function false_position(opcion, a, b, tol, i) {
 
     let iteraciones = 0;
     let c;
+    let ant= c;
     let tabla = []; // Almacena las quintuplas de cada iteración
 
     while (iteraciones < i) {
         c = (b * func(a) - a * func(b)) / (func(a) - func(b));
         let fc = func(c);
 
-        // Guardar la quintupla (iteración, a, b, c, f(c))
-        tabla.push([iteraciones + 1, a, b, c, fc]);
+        // Guardar la quintupla (iteración, a, b, c,f(a), f(b), f(c), Ea)
+        tabla.push([iteraciones + 1, a, b, c, func(a), func(b), fc, Math.abs(c-ant)]);
 
         if (fc === 0 || Math.abs(fc) < tol) break; // Convergencia
 
@@ -134,7 +135,7 @@ export function false_position(opcion, a, b, tol, i) {
         } else {
             b = c;
         }
-
+        ant =c
         iteraciones++;
     }
 

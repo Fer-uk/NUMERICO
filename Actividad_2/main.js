@@ -209,10 +209,9 @@ const inptol = document.getElementById('tol');
 const intp0 = document.getElementById("p0");
 const intp1 = document.getElementById('p1');
 const intmop = document.getElementById('miter');
-const lblraiz = document.getElementById('lblraiz');
+const lblraiz = document.getElementById('lblraiz');const lblerr = document.getElementById('lblerr');
 let slider = document.getElementById("slider");
 let sliderValue = document.getElementById("sliderV");
-const lblerr = document.getElementById('lblerr');
 let func;
 let method;
 let tablaG;
@@ -338,6 +337,8 @@ function setUpNR(){
 
        
         slider.max = tabla.length-1;
+
+        myChart.update();
 }
 
 function setUpPF(){
@@ -397,7 +398,6 @@ function setUpPF(){
         fill: false,
         pointRadius: 0
     });
-
     myChart.update();
 }
 
@@ -441,6 +441,8 @@ function setUpBS(){
         fill: false,
         pointRadius: 0
     });
+
+    myChart.update();
 }
 
 function setUpSC(){
@@ -448,7 +450,54 @@ function setUpSC(){
 }
 
 function setUpRF(){
+    const {raiz, tabla } = MT.false_position(func, parseFloat(intp0.value), parseFloat(intp1.value), parseFloat(inptol.value), parseInt(intmop.value))
+    tabla.unshift(['i', 'a', 'b', 'c','f(a)', 'f(b)', 'f(x)', 'Error absoluto']);
+    tablaG=tabla;
 
+    generarTabla(tabla)
+    slider.max = tabla.length-1;
+
+     //Agregar el punto que ira animando atravez del tiempo
+     myChart.data.datasets.push({
+        label: 'c = ' + parseFloat(tabla[1][3]),
+        data: [], // Y values
+        borderColor: 'red',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 2
+    });
+
+     //Agregar el punto f(a)
+    myChart.data.datasets.push({
+        label: 'f(a) = ' + parseFloat(tabla[1][3]),
+        data: [], // Y values
+        borderColor: 'rgb(43, 255, 0)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 2
+    });
+
+    //Agregar el punto f(b)
+    myChart.data.datasets.push({
+        label: 'f(b) = ' + parseFloat(tabla[1][3]),
+        data: [], // Y values
+        borderColor: 'rgb(255, 0, 98)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 2
+    });
+
+     //Recta de a a b
+     myChart.data.datasets.push({
+        label: 'Recta ab',
+        data: [], // Y values
+        borderColor: 'rgb(217, 255, 0)',
+        borderWidth: 2,
+        fill: false,
+        pointRadius: 0
+    });
+    
+    myChart.update();
 }
 
 function setUpRFM(){
@@ -541,7 +590,39 @@ function actualizarSC(x){
 }
 
 function actualizarRF(x){
+    slider.value = parseInt(tablaG[x][0])
+    sliderValue.textContent = slider.value;
+    //Actualizar labels
+    actlblRaiz(tablaG[x][7], tablaG[x][3], tablaG.length-1, x)
+    lblerr.textContent = 'Error absoluto: ' + tablaG[x][7];
+    //Actualizar el punto c
+    myChart.data.datasets[1].label = 'c = ' + parseFloat( tablaG[x][3]).toFixed(5);
+    myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][3]), y : 0}];
 
+    //Actualizar el punto f(a)
+    myChart.data.datasets[2].label = '(a): (' + parseFloat( tablaG[x][1]).toFixed(5) + ' , '+ parseFloat( tablaG[x][4]).toFixed(5) + ')';
+    myChart.data.datasets[2].data =  [{x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][4])}];
+
+    //Actualizar el punto f(b)
+    myChart.data.datasets[3].label = '(b): (' + parseFloat( tablaG[x][2]).toFixed(5) + ' , '+ parseFloat( tablaG[x][5]).toFixed(5) + ')';
+    myChart.data.datasets[3].data =  [{x:parseFloat(tablaG[x][2]), y : parseFloat(tablaG[x][5])}];
+
+
+    myChart.data.datasets[4].data =  [
+        {x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][4])},
+        {x:parseFloat(tablaG[x][2]), y : parseFloat(tablaG[x][5])}
+    ];
+
+    //linea vertical de a a b pasando por c
+    graphVerticalLine('rline', parseFloat(tablaG[x][4]), parseFloat(tablaG[x][5]), parseFloat(tablaG[x][3]))
+    
+    //linea vertical del 0 al punto f(a)
+    graphVerticalLine('gline', parseFloat(tablaG[x][4]), 0, parseFloat(tablaG[x][1]))
+
+    //linea vertcal del 0 al punto f(b)
+    graphVerticalLine('tline', 0, parseFloat(tablaG[x][5]), parseFloat(tablaG[x][2]))
+    myChart.update()
+    
 }
 
 function actualizarRFM(x){
