@@ -343,7 +343,7 @@ function setUpNR(){
 
 function setUpPF(){
     const {raiz, tabla } = MT.fixed_point(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
-    tabla.unshift(['i', 'p', 'p1', 'g(x)', 'f(x)', 'Ea']);
+    tabla.unshift(['i', 'p', 'p1', 'g(p)', 'f(p)', 'Ea']);
     tablaG=tabla;
 
     generarTabla(tabla)
