@@ -300,15 +300,15 @@ function generarTabla(arreglo) {
 
 function setUpNR(){
     const {raiz, tabla } = MT.newton_r(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
-        tabla.unshift(['i', 'x', 'xn', 'f(x)', 'Ea'])
+        tabla.unshift(['i', 'p', 'pi+1', 'f(pi+1)', 'f(p)', 'Ea'])
         tablaG =tabla;
         console.log(tabla)
         lblraiz.textContent = 'Raiz: ' + tabla[1][1];
-        lblerr.textContent = 'Error absoluto:: ' + tabla[1][4];
+        lblerr.textContent = 'Error absoluto:: ' + tabla[1][5];
         generarTabla(tabla)
         //Agregar el punto que ira animando atravez del tiempo
         myChart.data.datasets.push({
-            label: 'x' + parseFloat(tabla[1][1]),
+            label: 'p' + parseFloat(tabla[1][1]),
             data: [{x:parseFloat(tabla[1][1]), y : 0}], // Y values
             borderColor: 'red',
             borderWidth: 2,
@@ -317,7 +317,7 @@ function setUpNR(){
         });
         //Graficar xn
         myChart.data.datasets.push({
-            label: 'xn',
+            label: 'pi+1',
             data: [], // Y values
             borderColor: 'rgb(0, 255, 255)',
             borderWidth: 2,
@@ -403,7 +403,7 @@ function setUpPF(){
 
 function setUpBS(){
     const {raiz, tabla } = MT.bisection(func, parseFloat(intp0.value), parseFloat(intp1.value), parseFloat(inptol.value), parseInt(intmop.value))
-    tabla.unshift(['i', 'a', 'b', 'c', 'f(x)', 'intervalo']);
+    tabla.unshift(['i', 'a', 'b', 'c','f(a)', 'f(b)', 'f(c)', 'Error absoluto intervalo']);
     tablaG=tabla;
 
     generarTabla(tabla)
@@ -451,7 +451,7 @@ function setUpSC(){
 
 function setUpRF(){
     const {raiz, tabla } = MT.false_position(func, parseFloat(intp0.value), parseFloat(intp1.value), parseFloat(inptol.value), parseInt(intmop.value))
-    tabla.unshift(['i', 'a', 'b', 'c','f(a)', 'f(b)', 'f(x)', 'Error absoluto']);
+    tabla.unshift(['i', 'a', 'b', 'c','f(a)', 'f(b)', 'f(x)', 'Error absoluto raices']);
     tablaG=tabla;
 
     generarTabla(tabla)
@@ -509,20 +509,20 @@ function actualizarNR(x){
     slider.value = parseInt(tablaG[x][0])
     sliderValue.textContent = slider.value;
     //Actualizar labels
-    actlblRaiz(tablaG[x][4], tablaG[x][1], tablaG.length-1, x)
-    lblerr.textContent = 'Error absoluto: ' + tablaG[x][4];
+    actlblRaiz(tablaG[x][5], tablaG[x][1], tablaG.length-1, x)
+    lblerr.textContent = 'Error absoluto: ' + tablaG[x][5];
     //Actualizar la posicion del punto
-    myChart.data.datasets[1].label = 'x = ' + parseFloat(tablaG[x][1]).toFixed(5);
+    myChart.data.datasets[1].label = 'p = ' + parseFloat(tablaG[x][1]).toFixed(5);
     myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][1]), y : 0}];
-    myChart.data.datasets[2].label = 'xn = ' + parseFloat(tablaG[x][2]).toFixed(5);
+    myChart.data.datasets[2].label = 'pi+1 = ' + parseFloat(tablaG[x][2]).toFixed(5);
     myChart.data.datasets[2].data =  [{x:parseFloat(tablaG[x][2]), y : 0}];
     myChart.data.datasets[3].data=[
-        {x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][3])},
+        {x:parseFloat(tablaG[x][1]), y : parseFloat(tablaG[x][4])},
         {x:parseFloat(tablaG[x][2]), y : 0}
     ]
 
     //lINEA DE X A la recta tangente  vertical rline
-    graphVerticalLine('rline', 0 ,parseFloat(tablaG[x][3]),parseFloat(tablaG[x][1]))
+    graphVerticalLine('rline', 0 ,parseFloat(tablaG[x][4]),parseFloat(tablaG[x][1]))
 
     myChart.update();
 
@@ -563,7 +563,7 @@ function actualizarBS(x){
     sliderValue.textContent = slider.value;
     //Actualizar labels
     actlblRaiz(tablaG[x][5], tablaG[x][3], tablaG.length-1, x)
-    lblerr.textContent = 'Error absoluto: ' + tablaG[x][5];
+    lblerr.textContent = 'Error absoluto intervalo: ' + tablaG[x][7];
     //Actualizar el punto c
     myChart.data.datasets[1].label = 'c = ' + parseFloat( tablaG[x][3]).toFixed(5);
     myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][3]), y : 0}];
@@ -594,7 +594,7 @@ function actualizarRF(x){
     sliderValue.textContent = slider.value;
     //Actualizar labels
     actlblRaiz(tablaG[x][7], tablaG[x][3], tablaG.length-1, x)
-    lblerr.textContent = 'Error absoluto: ' + tablaG[x][7];
+    lblerr.textContent = 'Error absoluto raices: ' + tablaG[x][7];
     //Actualizar el punto c
     myChart.data.datasets[1].label = 'c = ' + parseFloat( tablaG[x][3]).toFixed(5);
     myChart.data.datasets[1].data =  [{x:parseFloat(tablaG[x][3]), y : 0}];

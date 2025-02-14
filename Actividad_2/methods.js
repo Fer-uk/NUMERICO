@@ -85,8 +85,8 @@ export function bisection(opcion, a, b, tol, i) {
         c = (a + b) / 2;
         let fc = func(c);
 
-        // Guardar la quintupla (iteración, a, b, c, f(c), inter)
-        tabla.push([iteraciones + 1, a, b, c, fc, (b - a) / 2]);
+        // Guardar la quintupla (iteración, a, b, c,f(a), f(b) f(c), inter)
+        tabla.push([iteraciones + 1, a, b, c, func(a), func(b), fc, (b - a) / 2]);
 
         if (fc === 0 || (b - a) / 2 < tol) break; // Convergencia
 
@@ -154,8 +154,8 @@ export function newton_r(opcion, x, tol, i){
     while (iteraciones < i) {
         xn = x - func(x)/der(x);
 
-        // Guardar la quintupla (iteración, x, xn, f(c))
-        tabla.push([iteraciones + 1, x, xn,  func(x), Math.abs(xn-x)]);
+        // Guardar la quintupla (iteración, x, xn, f(xn) f(x), error)
+        tabla.push([iteraciones + 1, x, xn, func(xn), func(x), Math.abs(xn-x)]);
 
         if (func(x) === 0 || Math.abs(xn-x) < tol) break; // Convergencia
 
