@@ -6,8 +6,8 @@ const funciones = {
     e: x => Math.exp(x) + Math.pow(2, -x) + 2 * Math.cos(x) - 6  // e^x + 2^(-x) + 2cos(x) - 6
 };
 
-const funcionesFixed = {
-    a: x => {      // ( 10-4x²)^1/3
+const funcionesFixed =[ 
+    {a: x => {      // ( 10-4x²)^1/3
         let det = (10-4*Math.pow(x,2))
         if (det<0){
             return (-1)*Math.pow((-1)*det, (1/3))
@@ -23,8 +23,30 @@ const funcionesFixed = {
         return Math.pow(det, (1/3))
     },  
     d: x =>  Math.cos(x),  //  cos(x)
-    e: x => Math.exp(x) + Math.pow(2, -x) + 2 * Math.cos(x) - 6 +x  // e^x + 2^(-x) + 2cos(x) - 6 + x
-}
+    e: x => Math.exp(x) + Math.pow(2, -x) + 2 * Math.cos(x) - 6 +x }, // e^x + 2^(-x) + 2cos(x) - 6 + x}
+    {
+        a: x => {      // ( 10-4x²)^1/3
+            let det = ((10-Math.pow(x,3))/4)
+           
+            return Math.pow(det, (1/2))
+        }, 
+        b: x => {      // ( 10-4x²)^1/3
+            let det = ((Math.pow(x,3)-5)/2)
+           
+            return Math.pow(det, (1/2))
+        },   // ( 2x² + 5)^(1/3)
+        c: x => {      // (1-3x² )^1/3
+            let det = ((1-Math.pow(x,3))/3)
+            
+            return Math.pow(det, (1/2))
+        },  
+        d: x => 2*x - Math.cos(x),  //  cos(x)
+    },
+    { a: x => Math.pow(x, 3) + 4 * Math.pow(x, 2)+x - 10, // x³ + 4x² - 10
+        b: x => Math.pow(x, 3) - 2 * Math.pow(x, 2)+x - 5,  // x³ - 2x² - 5
+        c: x => Math.pow(x, 3) + 3 * Math.pow(x, 2) +x- 1,  // x³ + 3x² - 1
+    }
+]
 
 const funcionesDerivadas = {
     a: x => 3 * Math.pow(x,2) + 8 * x,  // 3x2 + 8x
@@ -34,9 +56,10 @@ const funcionesDerivadas = {
     e: x => Math.exp(x) - Math.log(2) * Math.pow(2, -x) + 2 * Math.cos(x) - 6  // e^x - ln(2) * 2^(-x) - 2cos(x)
 }
 
-export function fixed_point(opcion, p, tol, i) {
+export function fixed_point(opcion, p,g, tol, i) {
     const func = funciones[opcion];
-    const gx = funcionesFixed[opcion];
+    console.log(funcionesFixed[g][opcion])
+    const gx = funcionesFixed[g][opcion];
 
     if (!func) {
         console.error("Opción de función no válida.");
@@ -53,7 +76,7 @@ export function fixed_point(opcion, p, tol, i) {
         // Guardar la quintupla (iteración, p, p1, ,g(p), f(p), error)
         tabla.push([iteraciones + 1, p, p1, gx(p), func(p1), Math.abs((p1 - p))]);
 
-        if (p1 === 0 || Math.abs((p1 - p))  < tol) break; // Convergencia
+        if (p1 === 0 || Math.abs((p1 - p))  < tol || p1 === NaN || p1 === Infinity) break; // Convergencia
 
         p = p1
 

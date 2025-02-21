@@ -187,3 +187,20 @@ input{
 #err{
     width: 50%;
 }
+
+.pol-item{
+    background-color: rgb(141, 209, 38)  ;
+    margin-left:  5px;
+    color: #fff;
+    margin-top:  5px;
+    padding: 5px;
+    transition: all 0.2s ease;
+    border-radius: 5px;
+    font-size: small;
+
+}
+
+.pol-item:hover{
+    transform: scale(1.1);
+    background-color: black;
+}

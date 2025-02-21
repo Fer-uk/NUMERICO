@@ -13,14 +13,24 @@ const funciones = {
     d: (a, b, pas) => FN.d(a, b, pas),
     e: (a, b, pas) => FN.e(a, b, pas)  // e^x + 2^(-x) + 2cos(x) - 6
 };
-
-const Gfunciones = {
-    a: (a, b, pas) => FN.apf(a, b, pas),  // (10-4x² )^1/3
-    b: (a, b, pas) => FN.bpf(a, b, pas),  // ( 2x² + 5)^(1/3)
-    c: (a, b, pas) => FN.cpf(a, b, pas),   // (1-3x² )^1/3
-    d: (a, b, pas) => FN.dpf(a, b, pas), //cos(x)
-    e: (a, b, pas) => FN.epf(a, b, pas)  // e^x + 2^(-x) + 2cos(x) - 6 + x
-}
+//Polinomios
+const poli = [
+    { a: "(10-4x^2)^(1/3)",  
+        b: "(5+2x^2)^(1/3)",
+        c: "(1-3x^2)^(1/3)",
+        d: "cos(x)",
+        e: "e^x + 2^(-x) + 2cos(x) - 6 + x" },
+    {a: "((10-x^3)/4)^(1/2)",  
+        b: "((x^3-5)/2)^(1/2)",
+        c: "((1-x^3)/3)^(1/2)",
+        d: "2x - cos(x)",
+    },
+    {
+        a:"x³+4x²+x-10",
+        b: "x³-2x²+x-5",
+        c: "x³+3x²+x-1",
+    },
+]
 
 //valores por default al seleccionar una funcion
 const defaultFN = {
@@ -212,11 +222,24 @@ const intmop = document.getElementById('miter');
 const lblraiz = document.getElementById('lblraiz');const lblerr = document.getElementById('lblerr');
 let slider = document.getElementById("slider");
 let sliderValue = document.getElementById("sliderV");
+const menu = document.getElementById("pol");
 let func;
 let method;
 let tablaG;
 let lineheight;
+let pol;
+const  options = {
+  a: ['0', '1', '2'],
+  b: ['0', '1', '2'],
+  c: ['0', '1', '2'],
+  d: ['0', '1'],
+  e: ['0'],
+  
+}
 
+
+
+menu.style.display = "none";
 
 Array.from(btnfn).forEach(boton => {
     boton.addEventListener('click', function() {
@@ -228,11 +251,37 @@ Array.from(btnfn).forEach(boton => {
         }
         func= this.id
         this.style.backgroundColor = "#0a0a0a";
+
+
+
+        
        
         inpa.value = defaultFN[this.id][0];
         inpb.value =  defaultFN[this.id][1];
         inptol.value =  defaultFN[this.id][2];
         intmop.value = defaultFN[this.id][3];
+
+        if(method === 'btnPF'){
+            menu.style.display = "block";
+            menu.innerHTML = "";
+            let i = 0;
+            options[func].forEach(option => {
+                let item = document.createElement("a");
+                item.classList.add("pol-item"); // Agrega una clase
+                item.id =String(i); // Agrega un id único
+                item.textContent = poli[option][func];
+                item.onclick = () => {
+                    if (pol){
+                        const ant = document.getElementById(pol);
+                        ant.style.backgroundColor = " rgb(141, 209, 38)";
+                    }
+                    const it = document.getElementById(item.id);
+                    it.style.backgroundColor =  "#0a0a0a";
+                    pol=item.id};
+                menu.appendChild(item);
+                i++;
+            });
+        }
 
     });
 });
@@ -251,8 +300,30 @@ Array.from(btnmtd).forEach(boton => {
        
         if (this.id === 'btnPF' || this.id === 'btnNR'){
             intp1.style.display = "none";
+            if(this.id === 'btnPF'){
+                menu.style.display = "block";
+                menu.innerHTML = "";
+                let i = 0;
+                options[func].forEach(option => {
+                    let item = document.createElement("a");
+                    item.classList.add("pol-item"); // Agrega una clase
+                    item.id =String(i); // Agrega un id único
+                    item.textContent =poli[option][func];
+                    item.onclick = () => {
+                        if (pol){
+                            const ant = document.getElementById(pol);
+                            ant.style.backgroundColor = " rgb(141, 209, 38)";
+                        }
+                        const it = document.getElementById(item.id);
+                        it.style.backgroundColor =  "#0a0a0a";
+                        pol=item.id};
+                    menu.appendChild(item);
+                    i++;
+                });
+            }
         }else{
             intp1.style.display = "";
+            menu.style.display = "none";
         }
         
     });
@@ -343,9 +414,11 @@ function setUpNR(){
 }
 
 function setUpPF(){
-    const {raiz, tabla } = MT.fixed_point(func, parseFloat(intp0.value), parseFloat(inptol.value), parseInt(intmop.value))
+    console.log(pol)
+    const {raiz, tabla } = MT.fixed_point(func, parseFloat(intp0.value), parseInt(pol), parseFloat(inptol.value), parseInt(intmop.value))
     tabla.unshift(['i', 'p', 'p1', 'g(p)', 'f(p)', 'Ea']);
     tablaG=tabla;
+   
 
     generarTabla(tabla)
     slider.max = tabla.length-1;
@@ -390,7 +463,7 @@ function setUpPF(){
     });
 
     //Graficar la funcion despejada x=g(x)
-    const g =Gfunciones[func](parseFloat(inpa.value), parseFloat(inpb.value), 100) 
+    const g = FN.pf(parseFloat(inpa.value), parseFloat(inpb.value), pol, func, 30)
     myChart.data.datasets.push({
         label: 'g(x)',
         data:g,  // Y values
@@ -809,6 +882,7 @@ function actualizarRFM(x){
     
     
 }
+
 
 
 const setUpFN = {
